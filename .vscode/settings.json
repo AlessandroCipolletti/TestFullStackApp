@@ -1,0 +1,29 @@
+{
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "editor.codeLens": false,
+  "eslint.workingDirectories": [
+    "./src"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "typescript.validate.enable": true,
+  "javascript.validate.enable": true,
+  "eslint.validate": [
+    "typescript"
+  ],
+  "eslint.enable": true,
+  "eslint.run": "onSave",
+  "files.autoSave": "off",
+  "eslint.rules.customizations": [
+    {
+      "rule": "prettier/prettier",
+      "severity": "off",
+    },
+    {
+      "rule": "@typescript-eslint/no-unused-vars",
+      "severity": "warn",
+    }
+  ],
+}

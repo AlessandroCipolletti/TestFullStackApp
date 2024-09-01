@@ -1,12 +1,12 @@
 {
   "extends": [
     "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint",
-    "filenames"
+    "@typescript-eslint"
   ],
   "rules": {
     "prettier/prettier": [
@@ -14,14 +14,14 @@
     ],
     "no-unused-vars": "off",
     "import/no-unresolved": "error",
+    "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
         "vars": "all",
-        "args": "after-used",
+        "args": "none",
         "ignoreRestSiblings": false
       }
-    ],
-    "filenames/match-exported": "error"
+    ]
   }
 }

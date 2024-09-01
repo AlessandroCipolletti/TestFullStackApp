@@ -8,6 +8,7 @@
     "start": "next start",
     "bd-migration": "npm run prisma:migrate --",
     "prisma:migrate": "npx prisma migrate dev",
+    "check-types": "tsc --noEmit",
     "lint": "next lint"
   },
   "dependencies": {
@@ -18,14 +19,21 @@
     "@mui/material": "latest",
     "@mui/material-nextjs": "latest",
     "@prisma/client": "^5.19.0",
+    "@reduxjs/toolkit": "^2.2.7",
     "@types/react-beautiful-dnd": "^13.1.8",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
     "next": "latest",
     "prisma": "^5.19.0",
     "react": "latest",
     "react-beautiful-dnd": "^13.1.1",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-redux": "^9.1.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
@@ -34,7 +42,6 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-filenames": "^1.3.2",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
     "typescript": "latest"

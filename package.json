@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "bd-migration": "npm run prisma:migrate --",
+    "prisma:migrate": "npx prisma migrate dev",
     "lint": "next lint"
   },
   "dependencies": {
@@ -15,8 +17,10 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/material-nextjs": "latest",
+    "@prisma/client": "^5.19.0",
     "@types/react-beautiful-dnd": "^13.1.8",
     "next": "latest",
+    "prisma": "^5.19.0",
     "react": "latest",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "latest"

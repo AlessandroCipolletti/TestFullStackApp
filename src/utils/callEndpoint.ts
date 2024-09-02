@@ -1,5 +1,6 @@
 import z from 'zod'
 import { Endpoint } from '@/types/endpoint'
+import { getTokenCookie } from '@/utils/loginToken'
 
 export const callEndpoint = async <
   QueryParams extends z.ZodType,
@@ -39,12 +40,14 @@ export const callEndpoint = async <
   }
 
   const url = endpoint.url(query)
+  const token = getTokenCookie()
 
   // Set up fetch options with method, headers, and body
   const fetchOptions: RequestInit = {
     method: endpoint.method,
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,

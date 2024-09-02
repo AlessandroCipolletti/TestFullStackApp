@@ -1,7 +1,11 @@
 import { z } from 'zod'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import LoginEndpoint, { TokenisedUserInfo } from '@/app/api/login/LoginEndpoint'
+import LoginEndpoint from '@/app/api/user/login/LoginEndpoint'
+import CreateUserEndpoint from '@/app/api/user/create/CreateUserEndpoint'
+import VerifyUserTokenEndpoint from '@/app/api/user/verify-token/VerifyUserTokenEndpoint'
+import { TokenisedUserInfo } from '@/app/api/user/utils'
 import { callEndpoint } from '@/utils/callEndpoint'
+import { setTokenCookie } from '@/utils/loginToken'
 
 export enum LoginStatus {
   IDLE = 0,
@@ -12,16 +16,25 @@ export enum LoginStatus {
 
 export type UserState = {
   loginStatus: LoginStatus
-  email: string
+  id: string | null
+  email: string | null
   firstName: string | null
   lastName: string | null
 }
 
 const initialState: UserState = {
   loginStatus: LoginStatus.IDLE,
-  email: '',
+  id: null,
+  email: null,
   firstName: null,
   lastName: null,
+}
+
+const setUser = (state: UserState, user: Omit<UserState, 'loginStatus'>) => {
+  state.id = user.id
+  state.email = user.email
+  state.firstName = user.firstName
+  state.lastName = user.lastName
 }
 
 const userReducer = createSlice({
@@ -30,17 +43,26 @@ const userReducer = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(createNewUser.fulfilled, (state, action) => {
+        state.loginStatus = LoginStatus.SUCCESS
+        setUser(state, action.payload)
+      })
+      .addCase(verifyUserToken.fulfilled, (state, action) => {
+        if (action.payload.valid && action.payload.user) {
+          state.loginStatus = LoginStatus.SUCCESS
+          setUser(state, action.payload.user)
+        } else {
+          state.loginStatus = LoginStatus.IDLE
+          setUser(state, initialState)
+        }
+      })
       .addCase(loginUser.pending, (state) => {
         state.loginStatus = LoginStatus.LOADING
-        state.email = initialState.email
-        state.firstName = initialState.firstName
-        state.lastName = initialState.lastName
+        setUser(state, initialState)
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loginStatus = LoginStatus.SUCCESS
-        state.email = action.payload.email
-        state.firstName = action.payload.firstName
-        state.lastName = action.payload.lastName
+        setUser(state, action.payload)
       })
       .addCase(loginUser.rejected, (state) => {
         state.loginStatus = LoginStatus.ERROR
@@ -48,17 +70,51 @@ const userReducer = createSlice({
   },
 })
 
-export const loginUser = createAsyncThunk(
-  'userActions/callLoginEndpoint',
-  async (params: z.infer<typeof LoginEndpoint.requestSchema>, thunkAPI) => {
-    const { token } = await callEndpoint(LoginEndpoint, {
-      body: params,
-    })
+export const createNewUser = createAsyncThunk<
+  z.infer<typeof TokenisedUserInfo>,
+  z.infer<typeof CreateUserEndpoint.requestSchema>
+>('userActions/callCreateUserEndpoint', async (params, thunkAPI) => {
+  const { token } = await callEndpoint(CreateUserEndpoint, {
+    body: params,
+  })
 
-    const payload: TokenisedUserInfo = JSON.parse(atob(token.split('.')[1]))
+  setTokenCookie(token)
 
-    return payload
-  }
-)
+  const payload: z.infer<typeof TokenisedUserInfo> = JSON.parse(
+    atob(token.split('.')[1])
+  )
+
+  return payload
+})
+
+export const loginUser = createAsyncThunk<
+  z.infer<typeof TokenisedUserInfo>,
+  z.infer<typeof LoginEndpoint.requestSchema>
+>('userActions/callLoginEndpoint', async (params, thunkAPI) => {
+  const { token } = await callEndpoint(LoginEndpoint, {
+    body: params,
+  })
+
+  setTokenCookie(token)
+
+  const payload: z.infer<typeof TokenisedUserInfo> = JSON.parse(
+    atob(token.split('.')[1])
+  )
+
+  return payload
+})
+
+export const verifyUserToken = createAsyncThunk<
+  z.infer<typeof VerifyUserTokenEndpoint.responseSchema>,
+  void
+>('userActions/verifyUserToken', async (params, thunkAPI) => {
+  console.log('call verifyUserToken')
+  return await callEndpoint(VerifyUserTokenEndpoint, {})
+})
+
+// TODO onLogout:
+// if (!response.ok && response.status === 401) {
+//   emptyTokenCookie()
+// }
 
 export default userReducer.reducer

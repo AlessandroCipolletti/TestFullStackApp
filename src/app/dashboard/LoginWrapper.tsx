@@ -1,25 +1,36 @@
 'use client'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { selectUserIsLogged } from '@/store/user/userSelectors'
-import { useSelector } from '@/store/hooks'
+import { verifyUserToken } from '@/store/user/userReducer'
+import { useDispatch, useSelector } from '@/store/hooks'
+import { useRouter } from 'next/navigation'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 type LoginWrapperProps = {
   children: ReactNode
 }
 
 export default function LoginWrapper({ children }: LoginWrapperProps) {
+  const router = useRouter()
+  const dispatch = useDispatch()
   const isLogged = useSelector(selectUserIsLogged)
-  console.log(isLogged)
 
-  // useEffect(() => {
-  //   if (!isLogged) {
-  //     debugger
-  //     // router.push('/login')
-  //   }
-  // }, [isLogged, router])
+  useEffect(() => {
+    const doJob = async () => {
+      if (!isLogged) {
+        const result = await dispatch(verifyUserToken())
+        const { valid, user } = unwrapResult(result)
+
+        if (!valid || !user) {
+          router.push('/login')
+        }
+      }
+    }
+    doJob()
+  }, [isLogged, router, dispatch])
 
   if (!isLogged) {
-    return 'please log in'
+    return null
   }
 
   return <>{children}</>

@@ -8,10 +8,10 @@ import { callEndpoint } from '@/utils/callEndpoint'
 import { setTokenCookie } from '@/utils/loginToken'
 
 export enum LoginStatus {
-  IDLE = 0,
-  LOADING = 1,
-  ERROR = 2,
-  SUCCESS = 3,
+  IDLE = 'idle',
+  LOADING = 'loading',
+  ERROR = 'error',
+  LOGGED = 'logged',
 }
 
 export type UserState = {
@@ -43,25 +43,41 @@ const userReducer = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // CREATE USER
       .addCase(createNewUser.fulfilled, (state, action) => {
-        state.loginStatus = LoginStatus.SUCCESS
+        state.loginStatus = LoginStatus.LOGGED
         setUser(state, action.payload)
+      })
+      .addCase(createNewUser.rejected, (state, action) => {
+        // TODO
+      })
+
+      // VERIFY USER TOKEN
+      .addCase(verifyUserToken.pending, (state, action) => {
+        state.loginStatus = LoginStatus.LOADING
+        setUser(state, initialState)
+      })
+      .addCase(verifyUserToken.rejected, (state, action) => {
+        state.loginStatus = LoginStatus.ERROR
+        setUser(state, initialState)
       })
       .addCase(verifyUserToken.fulfilled, (state, action) => {
         if (action.payload.valid && action.payload.user) {
-          state.loginStatus = LoginStatus.SUCCESS
+          state.loginStatus = LoginStatus.LOGGED
           setUser(state, action.payload.user)
         } else {
           state.loginStatus = LoginStatus.IDLE
           setUser(state, initialState)
         }
       })
+
+      // LOGIN USER
       .addCase(loginUser.pending, (state) => {
         state.loginStatus = LoginStatus.LOADING
         setUser(state, initialState)
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.loginStatus = LoginStatus.SUCCESS
+        state.loginStatus = LoginStatus.LOGGED
         setUser(state, action.payload)
       })
       .addCase(loginUser.rejected, (state) => {
@@ -108,7 +124,6 @@ export const verifyUserToken = createAsyncThunk<
   z.infer<typeof VerifyUserTokenEndpoint.responseSchema>,
   void
 >('userActions/verifyUserToken', async (params, thunkAPI) => {
-  console.log('call verifyUserToken')
   return await callEndpoint(VerifyUserTokenEndpoint, {})
 })
 

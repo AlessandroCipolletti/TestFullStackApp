@@ -42,7 +42,6 @@ export const callEndpoint = async <
   const url = endpoint.url(query)
   const token = getTokenCookie()
 
-  // Set up fetch options with method, headers, and body
   const fetchOptions: RequestInit = {
     method: endpoint.method,
     headers: {
@@ -59,10 +58,6 @@ export const callEndpoint = async <
     throw new Error(`Api Error: URL:${url} status:${response.status}`)
   }
 
-  const responseData = await response.json()
-
-  // Validate api response if schema is provided
-  if (endpoint.responseSchema) {
-    return endpoint.responseSchema.parse(responseData)
-  }
+  const responseJson = await response.json()
+  return endpoint.responseSchema.parse(responseJson)
 }

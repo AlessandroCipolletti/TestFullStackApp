@@ -1,23 +1,31 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Container, TextField, Button, Typography, styled } from '@mui/material'
 import { useDispatch, useSelector } from '@/store/hooks'
 import { loginUser, LoginStatus } from '@/store/user/userReducer'
 import { selectUserLoginStatus } from '@/store/user/userSelectors'
-import LoginEndpoint from '@/app/api/login/LoginEndpoint'
+import LoginEndpoint from '@/app/api/user/login/LoginEndpoint'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
+  const router = useRouter()
   const loginStatus = useSelector(selectUserLoginStatus)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (loginStatus === LoginStatus.LOGGED) {
+      router.push('/dashboard')
+    }
+  }, [loginStatus, router])
 
   const canSubmit = useMemo(() => {
     return (
       email &&
       password &&
       loginStatus !== LoginStatus.LOADING &&
-      loginStatus !== LoginStatus.SUCCESS &&
+      loginStatus !== LoginStatus.LOGGED &&
       LoginEndpoint.requestSchema.safeParse({ email, password }).success ===
         true
     )

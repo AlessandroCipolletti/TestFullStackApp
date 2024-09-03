@@ -23,6 +23,9 @@ export default function HomePage() {
         <Link href="/dashboard" color="secondary" component={NextLink}>
           Go to the dashboard page
         </Link>
+        <Link href="/login" color="secondary" component={NextLink}>
+          Go to login
+        </Link>
       </Box>
     </Container>
   )

@@ -26,11 +26,20 @@ export const createUserToken = (user: User) => {
   return token
 }
 
-export const decryptUserToken = (token: string) => {
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!)
+export const verifyRequestToken = (request: Request) => {
+  const authHeader = request.headers.get('Authorization')
+  if (!authHeader) {
+    throw new Error('No token provided')
+  }
 
+  const token = authHeader.split(' ')[1] // `Bearer ${token}`
+  if (!token) {
+    throw new Error('No token provided')
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!)
   if (typeof decoded !== 'object') {
-    return null
+    throw new Error('No token provided')
   }
 
   return decoded

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import NextLink from 'next/link'
 
-export default function Page2() {
+export default function Page1() {
   return (
     <Container maxWidth="lg">
       <Box
@@ -18,16 +18,13 @@ export default function Page2() {
         }}
       >
         <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          Dashboard
+          Page 1
         </Typography>
-        <Link href="/dashboard/page1" color="secondary" component={NextLink}>
-          Go to the page 1
+        <Link href="/dashboard" color="secondary" component={NextLink}>
+          Go to the dashboard
         </Link>
         <Link href="/dashboard/page2" color="secondary" component={NextLink}>
           Go to the page 2
-        </Link>
-        <Link href="/" color="secondary" component={NextLink}>
-          Go to the home
         </Link>
       </Box>
     </Container>

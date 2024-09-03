@@ -18,16 +18,13 @@ export default function Page2() {
         }}
       >
         <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          Dashboard
+          Page 2
         </Typography>
+        <Link href="/dashboard" color="secondary" component={NextLink}>
+          Go to the dashboard
+        </Link>
         <Link href="/dashboard/page1" color="secondary" component={NextLink}>
           Go to the page 1
-        </Link>
-        <Link href="/dashboard/page2" color="secondary" component={NextLink}>
-          Go to the page 2
-        </Link>
-        <Link href="/" color="secondary" component={NextLink}>
-          Go to the home
         </Link>
       </Box>
     </Container>

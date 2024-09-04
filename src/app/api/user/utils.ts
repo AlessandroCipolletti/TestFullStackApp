@@ -2,8 +2,8 @@ import { User } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 import { z } from 'zod'
 
-const accessTokenExpiry = '30s'
-const sessionTokenExpiry = '1m'
+const accessTokenExpiry = '1h'
+const sessionTokenExpiry = '7d'
 
 export const TokenisedUserInfo = z.object({
   id: z.string(),

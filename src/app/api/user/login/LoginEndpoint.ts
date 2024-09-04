@@ -6,7 +6,10 @@ const LoginEndpointRequestSchema = z.object({
   password: z.string().min(8),
 })
 
-const LoginEndpointResponseSchema = z.object({ token: z.string() })
+const LoginEndpointResponseSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+})
 
 const LoginEndpoint = makeEndpoint({
   url: () => `/api/user/login`,

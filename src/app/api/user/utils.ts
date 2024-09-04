@@ -2,7 +2,8 @@ import { User } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 import { z } from 'zod'
 
-const tokenExpiry = '1h'
+const accessTokenExpiry = '30s'
+const sessionTokenExpiry = '1m'
 
 export const TokenisedUserInfo = z.object({
   id: z.string(),
@@ -11,7 +12,7 @@ export const TokenisedUserInfo = z.object({
   lastName: z.string().nullable(),
 })
 
-export const createUserToken = (user: User) => {
+export const createUserAccessToken = (user: User) => {
   const userPublicInfo: z.infer<typeof TokenisedUserInfo> = {
     id: user.id,
     email: user.email,
@@ -20,29 +21,41 @@ export const createUserToken = (user: User) => {
   }
 
   const token = jwt.sign({ user: userPublicInfo }, process.env.JWT_SECRET!, {
-    expiresIn: tokenExpiry,
+    expiresIn: accessTokenExpiry,
+  })
+
+  return token
+}
+
+export const createUserRefreshToken = (user: User) => {
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+    expiresIn: sessionTokenExpiry,
   })
 
   return token
 }
 
 export const verifyRequestToken = (request: Request) => {
-  const authHeader = request.headers.get('Authorization')
-  if (!authHeader) {
-    throw new Error('No token provided')
-  }
+  try {
+    const authHeader = request.headers.get('Authorization')
+    if (!authHeader) {
+      return false
+    }
 
-  const token = authHeader.split(' ')[1] // `Bearer ${token}`
-  if (!token) {
-    throw new Error('No token provided')
-  }
+    const token = authHeader.split(' ')[1] // `Bearer ${token}`
+    if (!token) {
+      return false
+    }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!)
-  if (typeof decoded !== 'object') {
-    throw new Error('No token provided')
-  }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!)
+    if (typeof decoded !== 'object') {
+      return false
+    }
 
-  return decoded
+    return decoded
+  } catch (e) {
+    return false
+  }
 }
 
 // const passwordSchema = z.string()

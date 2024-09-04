@@ -6,6 +6,9 @@ import { TokenisedUserInfo, verifyRequestToken } from '../utils'
 export async function POST(request: Request) {
   try {
     const decodedToken = verifyRequestToken(request)
+    if (!decodedToken) {
+      throw new Error('No token provided')
+    }
 
     const user: z.infer<typeof TokenisedUserInfo> | null = decodedToken.user
 

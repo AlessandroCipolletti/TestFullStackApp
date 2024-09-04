@@ -8,7 +8,10 @@ const CreateUserEndpointRequestSchema = z.object({
   lastName: z.string().optional(),
 })
 
-const CreateUserEndpointResponseSchema = z.object({ token: z.string() })
+const CreateUserEndpointResponseSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+})
 
 const CreateUserEndpoint = makeEndpoint({
   url: () => `/api/user/create`,

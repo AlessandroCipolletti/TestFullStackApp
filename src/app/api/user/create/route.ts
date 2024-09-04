@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
 import CreateUserEndpoint from './CreateUserEndpoint'
-import { createUserToken } from '../utils'
+import { createUserAccessToken, createUserRefreshToken } from '../utils'
 
 export async function POST(request: Request) {
   const {
@@ -32,10 +32,12 @@ export async function POST(request: Request) {
     },
   })
 
-  const token = createUserToken(newUser)
+  const accessToken = createUserAccessToken(newUser)
+  const refreshToken = createUserRefreshToken(newUser)
 
   const response: z.infer<typeof CreateUserEndpoint.responseSchema> = {
-    token,
+    accessToken,
+    refreshToken,
   }
 
   return NextResponse.json(response, { status: 201 })

@@ -1,10 +1,13 @@
 'use client'
 import React, { ReactNode, useEffect } from 'react'
-import { selectUserIsLogged } from '@/store/user/userSelectors'
+import {
+  selectUserIsLogged,
+  selectUserLoginLoading,
+  selectUserLoginHasError,
+} from '@/store/user/userSelectors'
 import { verifyUserToken } from '@/store/user/userReducer'
 import { useDispatch, useSelector } from '@/store/hooks'
-import { useRouter } from 'next/navigation'
-import { unwrapResult } from '@reduxjs/toolkit'
+import { usePathname, useRouter } from 'next/navigation'
 
 type LoginWrapperProps = {
   children: ReactNode
@@ -13,21 +16,20 @@ type LoginWrapperProps = {
 export default function LoginWrapper({ children }: LoginWrapperProps) {
   const router = useRouter()
   const dispatch = useDispatch()
+  const pathname = usePathname()
   const isLogged = useSelector(selectUserIsLogged)
+  const isLoading = useSelector(selectUserLoginLoading)
+  const hasError = useSelector(selectUserLoginHasError)
 
   useEffect(() => {
-    const doJob = async () => {
-      if (!isLogged) {
-        const result = await dispatch(verifyUserToken())
-        const { valid, user } = unwrapResult(result)
-
-        if (!valid || !user) {
-          router.push('/login')
-        }
+    if (!isLogged) {
+      if (hasError) {
+        router.push(`/login?redirect=${pathname}`, {})
+      } else if (!isLoading) {
+        dispatch(verifyUserToken())
       }
     }
-    doJob()
-  }, [isLogged, router, dispatch])
+  }, [isLogged, hasError, isLoading, router, pathname, dispatch])
 
   if (!isLogged) {
     return null

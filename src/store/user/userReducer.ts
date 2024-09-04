@@ -5,11 +5,17 @@ import CreateUserEndpoint from '@/app/api/user/create/CreateUserEndpoint'
 import VerifyUserTokenEndpoint from '@/app/api/user/verify-token/VerifyUserTokenEndpoint'
 import { TokenisedUserInfo } from '@/app/api/user/utils'
 import { callEndpoint } from '@/utils/callEndpoint'
-import { setTokenCookie } from '@/utils/loginToken'
+import {
+  emptyAccessTokenCookie,
+  emptyRefreshTokenCookie,
+  setAccessTokenCookie,
+  setRefreshTokenCookie,
+} from '@/utils/loginToken'
 
 export enum LoginStatus {
   IDLE = 'idle',
   LOADING = 'loading',
+  EXPIRED = 'expired',
   ERROR = 'error',
   LOGGED = 'logged',
 }
@@ -58,7 +64,7 @@ const userReducer = createSlice({
         setUser(state, initialState)
       })
       .addCase(verifyUserToken.rejected, (state, action) => {
-        state.loginStatus = LoginStatus.ERROR
+        state.loginStatus = LoginStatus.EXPIRED
         setUser(state, initialState)
       })
       .addCase(verifyUserToken.fulfilled, (state, action) => {
@@ -66,7 +72,7 @@ const userReducer = createSlice({
           state.loginStatus = LoginStatus.LOGGED
           setUser(state, action.payload.user)
         } else {
-          state.loginStatus = LoginStatus.IDLE
+          state.loginStatus = LoginStatus.EXPIRED
           setUser(state, initialState)
         }
       })
@@ -90,14 +96,21 @@ export const createNewUser = createAsyncThunk<
   z.infer<typeof TokenisedUserInfo>,
   z.infer<typeof CreateUserEndpoint.requestSchema>
 >('userActions/callCreateUserEndpoint', async (params, thunkAPI) => {
-  const { token } = await callEndpoint(CreateUserEndpoint, {
+  const [result, error] = await callEndpoint(CreateUserEndpoint, {
     body: params,
   })
 
-  setTokenCookie(token)
+  if (!result) {
+    return thunkAPI.rejectWithValue(error?.message ?? 'Create user error')
+  }
+
+  const { accessToken, refreshToken } = result
+
+  setAccessTokenCookie(accessToken)
+  setRefreshTokenCookie(refreshToken)
 
   const payload: z.infer<typeof TokenisedUserInfo> = JSON.parse(
-    atob(token.split('.')[1])
+    atob(accessToken.split('.')[1])
   )
 
   return payload
@@ -107,14 +120,21 @@ export const loginUser = createAsyncThunk<
   z.infer<typeof TokenisedUserInfo>,
   z.infer<typeof LoginEndpoint.requestSchema>
 >('userActions/callLoginEndpoint', async (params, thunkAPI) => {
-  const { token } = await callEndpoint(LoginEndpoint, {
+  const [result, error] = await callEndpoint(LoginEndpoint, {
     body: params,
   })
 
-  setTokenCookie(token)
+  if (!result) {
+    return thunkAPI.rejectWithValue(error?.message ?? 'Invalid login')
+  }
+
+  const { accessToken, refreshToken } = result
+
+  setAccessTokenCookie(accessToken)
+  setRefreshTokenCookie(refreshToken)
 
   const payload: z.infer<typeof TokenisedUserInfo> = JSON.parse(
-    atob(token.split('.')[1])
+    atob(accessToken.split('.')[1])
   )
 
   return payload
@@ -124,12 +144,21 @@ export const verifyUserToken = createAsyncThunk<
   z.infer<typeof VerifyUserTokenEndpoint.responseSchema>,
   void
 >('userActions/verifyUserToken', async (params, thunkAPI) => {
-  return await callEndpoint(VerifyUserTokenEndpoint, {})
+  const [result, error] = await callEndpoint(VerifyUserTokenEndpoint, {})
+
+  if (!result || !result.valid || !result.user) {
+    emptyAccessTokenCookie()
+    emptyRefreshTokenCookie()
+    return thunkAPI.rejectWithValue(error?.message ?? 'Invalid token')
+  }
+
+  return result
 })
 
 // TODO onLogout:
 // if (!response.ok && response.status === 401) {
-//   emptyTokenCookie()
+//   emptyAccessTokenCookie()
+//   emptyRefreshTokenCookie()
 // }
 
 export default userReducer.reducer

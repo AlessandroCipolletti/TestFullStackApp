@@ -1,11 +1,25 @@
-import React from 'react'
+'use client'
+import React, { useCallback, useEffect } from 'react'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import NextLink from 'next/link'
+import { callEndpoint } from '@/utils/callEndpoint'
+import TestAuthApiEndpoint from '@/app/api/test-auth-api/TestAuthApiEndpoint'
 
-export default function Page2() {
+export default function Dashboard() {
+  const callSignedApi = useCallback(async () => {
+    await callEndpoint(TestAuthApiEndpoint, {})
+    setTimeout(() => {
+      callSignedApi()
+    }, 5_000)
+  }, [])
+
+  useEffect(() => {
+    callSignedApi()
+  }, [callSignedApi])
+
   return (
     <Container maxWidth="lg">
       <Box

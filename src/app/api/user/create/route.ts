@@ -32,8 +32,8 @@ export async function POST(request: Request) {
     },
   })
 
-  const accessToken = createUserAccessToken(newUser)
-  const refreshToken = createUserRefreshToken(newUser)
+  const accessToken = await createUserAccessToken(newUser)
+  const refreshToken = await createUserRefreshToken(newUser)
 
   const response: z.infer<typeof CreateUserEndpoint.responseSchema> = {
     accessToken,

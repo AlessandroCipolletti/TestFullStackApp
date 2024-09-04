@@ -1,9 +1,9 @@
-import { User } from '@prisma/client'
-import jwt from 'jsonwebtoken'
 import { z } from 'zod'
+import { SignJWT, jwtVerify } from 'jose'
+import { User } from '@prisma/client'
 
 const accessTokenExpiry = '1h'
-const sessionTokenExpiry = '7d'
+const refreshTokenExpiry = '7d'
 
 export const TokenisedUserInfo = z.object({
   id: z.string(),
@@ -12,7 +12,7 @@ export const TokenisedUserInfo = z.object({
   lastName: z.string().nullable(),
 })
 
-export const createUserAccessToken = (user: User) => {
+export const createUserAccessToken = async (user: User) => {
   const userPublicInfo: z.infer<typeof TokenisedUserInfo> = {
     id: user.id,
     email: user.email,
@@ -20,24 +20,28 @@ export const createUserAccessToken = (user: User) => {
     lastName: user.lastName,
   }
 
-  const token = jwt.sign({ user: userPublicInfo }, process.env.JWT_SECRET!, {
-    expiresIn: accessTokenExpiry,
-  })
+  const token = await new SignJWT({ user: userPublicInfo })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(accessTokenExpiry)
+    .sign(new TextEncoder().encode(process.env.JWT_SECRET!))
 
   return token
 }
 
-export const createUserRefreshToken = (user: User) => {
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: sessionTokenExpiry,
-  })
+export const createUserRefreshToken = async (user: User) => {
+  const token = await new SignJWT({ userId: user.id })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(refreshTokenExpiry)
+    .sign(new TextEncoder().encode(process.env.JWT_SECRET!))
 
   return token
 }
 
-export const verifyRequestToken = (request: Request) => {
+export const verifyRequestToken = async (request: Request) => {
   try {
-    const authHeader = request.headers.get('Authorization')
+    const authHeader =
+      request.headers.get('Authorization') ||
+      request.headers.get('authorization')
     if (!authHeader) {
       return false
     }
@@ -47,12 +51,16 @@ export const verifyRequestToken = (request: Request) => {
       return false
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!)
-    if (typeof decoded !== 'object') {
+    const encoder = new TextEncoder()
+    const { payload } = await jwtVerify(
+      token,
+      encoder.encode(process.env.JWT_SECRET!)
+    )
+    if (typeof payload !== 'object') {
       return false
     }
 
-    return decoded
+    return payload
   } catch (e) {
     return false
   }

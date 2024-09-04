@@ -5,12 +5,12 @@ import { TokenisedUserInfo, verifyRequestToken } from '../utils'
 
 export async function POST(request: Request) {
   try {
-    const decodedToken = verifyRequestToken(request)
+    const decodedToken = await verifyRequestToken(request)
     if (!decodedToken) {
       throw new Error('No token provided')
     }
 
-    const user: z.infer<typeof TokenisedUserInfo> | null = decodedToken.user
+    const user = TokenisedUserInfo.parse(decodedToken.user)
 
     return NextResponse.json({ valid: true, user })
   } catch (error) {

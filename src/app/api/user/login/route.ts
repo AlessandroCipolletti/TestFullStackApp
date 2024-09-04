@@ -18,8 +18,8 @@ export async function POST(request: Request) {
     )
   }
 
-  const accessToken = createUserAccessToken(user)
-  const refreshToken = createUserRefreshToken(user)
+  const accessToken = await createUserAccessToken(user)
+  const refreshToken = await createUserRefreshToken(user)
 
   const response: z.infer<typeof LoginEndpoint.responseSchema> = {
     accessToken,

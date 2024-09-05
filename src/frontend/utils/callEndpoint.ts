@@ -4,7 +4,7 @@ import {
   getAccessTokenCookie,
   getRefreshTokenCookie,
   setAccessTokenCookie,
-} from '@/utils/loginToken'
+} from '@/frontend/utils/loginToken'
 import RefreshUserTokenEndpoint from '@/endpoints/RefreshUserTokenEndpoint'
 
 export const callEndpoint = async <

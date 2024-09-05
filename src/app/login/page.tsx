@@ -1,13 +1,13 @@
 'use client'
 import { useState, useMemo, useEffect, KeyboardEvent } from 'react'
 import { Container, TextField, Button, Typography, styled } from '@mui/material'
-import { useDispatch, useSelector } from '@/store/hooks'
-import { loginUser } from '@/store/user/userReducer'
+import { useDispatch, useSelector } from '@/frontend/store/hooks'
+import { loginUser } from '@/frontend/store/user/userReducer'
 import {
   selectUserIsLogged,
   selectUserLoginHasError,
   selectUserLoginLoading,
-} from '@/store/user/userSelectors'
+} from '@/frontend/store/user/userSelectors'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import { useRouter, useSearchParams } from 'next/navigation'
 

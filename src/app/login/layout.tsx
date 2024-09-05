@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import StoreProvider from '@/store/StoreProvider'
+import StoreProvider from '@/frontend/store/StoreProvider'
 
 type DashboardLayoutProps = {
   children: ReactNode

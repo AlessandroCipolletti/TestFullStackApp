@@ -4,9 +4,9 @@ import {
   selectUserIsLogged,
   selectUserLoginLoading,
   selectUserLoginHasError,
-} from '@/store/user/userSelectors'
-import { verifyUserToken } from '@/store/user/userReducer'
-import { useDispatch, useSelector } from '@/store/hooks'
+} from '@/frontend/store/user/userSelectors'
+import { verifyUserToken } from '@/frontend/store/user/userReducer'
+import { useDispatch, useSelector } from '@/frontend/store/hooks'
 import { usePathname, useRouter } from 'next/navigation'
 
 type LoginWrapperProps = {

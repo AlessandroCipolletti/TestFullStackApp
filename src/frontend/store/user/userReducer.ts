@@ -4,13 +4,13 @@ import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
 import VerifyUserTokenEndpoint from '@/endpoints/VerifyUserTokenEndpoint'
 import TokenisedUserInfo from '@/endpoints/types/TokenisedUserInfo'
-import { callEndpoint } from '@/utils/callEndpoint'
+import { callEndpoint } from '@/frontend/utils/callEndpoint'
 import {
   emptyAccessTokenCookie,
   emptyRefreshTokenCookie,
   setAccessTokenCookie,
   setRefreshTokenCookie,
-} from '@/utils/loginToken'
+} from '@/frontend/utils/loginToken'
 
 export enum LoginStatus {
   IDLE = 'idle',

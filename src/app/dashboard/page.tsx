@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import NextLink from 'next/link'
-import { callEndpoint } from '@/utils/callEndpoint'
+import { callEndpoint } from '@/frontend/utils/callEndpoint'
 import TestAuthApiEndpoint from '@/endpoints/TestAuthApiEndpoint'
 
 export default function Dashboard() {

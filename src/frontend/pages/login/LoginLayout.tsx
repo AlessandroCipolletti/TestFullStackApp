@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { Suspense, ReactNode } from 'react'
 import StoreProvider from '@/frontend/store/StoreProvider'
 
 type DashboardLayoutProps = {
@@ -6,5 +6,9 @@ type DashboardLayoutProps = {
 }
 
 export default function LoginLayout({ children }: DashboardLayoutProps) {
-  return <StoreProvider>{children}</StoreProvider>
+  return (
+    <StoreProvider>
+      <Suspense>{children}</Suspense>
+    </StoreProvider>
+  )
 }

@@ -5,10 +5,8 @@ export const getAccessTokenCookie = () => {
   )
 
   if (parts.length === 2) {
-    return parts.pop()?.split(';').shift() ?? null
+    return parts.pop()?.split(';').shift()
   }
-
-  return null
 }
 
 export const setAccessTokenCookie = (token: string) => {
@@ -27,10 +25,8 @@ export const getRefreshTokenCookie = () => {
   )
 
   if (parts.length === 2) {
-    return parts.pop()?.split(';').shift() ?? null
+    return parts.pop()?.split(';').shift()
   }
-
-  return null
 }
 
 export const setRefreshTokenCookie = (token: string) => {

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { SignJWT, jwtVerify } from 'jose'
 import { User } from '@prisma/client'
 import TokenisedUserInfo from '@/endpoints/types/TokenisedUserInfo'
+
 const accessTokenExpiry = '1h'
 const refreshTokenExpiry = '7d'
 

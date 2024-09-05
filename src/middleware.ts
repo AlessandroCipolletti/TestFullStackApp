@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { verifyRequestToken } from '@/app/api/user/utils'
+import { verifyRequestToken } from '@/backend/apiControllers/user/userApiUtils'
 
 const WHITE_LISTED_API = ['/api/user/login', '/api/user/create']
 

@@ -24,7 +24,11 @@ export default function LoginWrapper({ children }: LoginWrapperProps) {
   useEffect(() => {
     if (!isLogged) {
       if (hasError) {
-        router.push(`/login?redirect=${pathname}`, {})
+        if (pathname && pathname !== '/login') {
+          router.push(`/login?redirect=${pathname}`, {})
+        } else {
+          router.push('/login', {})
+        }
       } else if (!isLoading) {
         dispatch(verifyUserToken())
       }

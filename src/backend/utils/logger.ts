@@ -1,45 +1,58 @@
 import pino from 'pino'
-import { multistream } from 'pino-multi-stream'
 import fs from 'fs'
 import path from 'path'
-import { createStream } from 'rotating-file-stream'
 import pretty from 'pino-pretty'
+import { multistream } from 'pino-multi-stream'
+import { createStream } from 'rotating-file-stream'
 
-const streams = []
+const DEBUG_FILE_LOGS = false
 
-// log in console
-if (process.env.NODE_ENV === 'production') {
-  streams.push({ stream: process.stdout })
-} else {
-  streams.push({ stream: pretty({ colorize: true }) })
-}
+const getPinoStreams = () => {
+  const streams = []
 
-// log in file
-if (process.env.NODE_ENV === 'production') {
-  const logDirectory = path.join(process.cwd(), 'logs')
-  if (!fs.existsSync(logDirectory)) {
-    fs.mkdirSync(logDirectory) // create log directory if it does not exist
+  // log in console
+  if (process.env.NODE_ENV === 'production') {
+    streams.push({ stream: process.stdout })
+  } else {
+    streams.push({ stream: pretty({ colorize: true }) })
   }
 
-  const stream = createStream(
-    (time, index = 0) => {
-      if (!time || typeof time === 'number') {
-        time = new Date()
-      }
-      const date = time.toISOString().slice(0, 10) // date format YYYY-MM-DD
-      return `${date}_${index}.log`
-    },
-    {
-      interval: '1d', // auto daily rotation at midnight
-      size: '1K', // rotate every 10 MegaBytes written
-      path: logDirectory,
-      // maxFiles: 7,
+  // log in file
+  let logDirectory = ''
+  if (process.env.NODE_ENV === 'production') {
+    logDirectory = process.env.LOGS_DIRECTORY || '/usr/src'
+  } else if (DEBUG_FILE_LOGS) {
+    logDirectory = path.join(
+      process.cwd(),
+      process.env.LOGS_DIRECTORY || 'logs'
+    )
+    if (!fs.existsSync(logDirectory)) {
+      fs.mkdirSync(logDirectory) // create log directory if it does not exist
     }
-  )
+  }
+  if (logDirectory) {
+    const stream = createStream(
+      (time, index = 0) => {
+        if (!time || typeof time === 'number') {
+          time = new Date()
+        }
+        const date = time.toISOString().slice(0, 10) // date format YYYY-MM-DD
+        return `${date}_${index}.log`
+      },
+      {
+        interval: '1d', // auto daily rotation at midnight
+        size: '10M', // rotate every 10 MegaBytes written
+        path: logDirectory,
+        // maxFiles: 7,
+      }
+    )
 
-  streams.push({
-    stream,
-  })
+    streams.push({
+      stream,
+    })
+  }
+
+  return streams
 }
 
 const logger = pino(
@@ -52,7 +65,7 @@ const logger = pino(
       },
     },
   },
-  multistream(streams)
+  multistream(getPinoStreams())
 )
 
 export default logger

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from '@/frontend/store/hooks'
 import { loginUser } from '@/frontend/store/user/userReducer'
 import {
   selectUserIsLogged,
-  selectUserLoginHasError,
+  selectUserLoginHasFailed,
   selectUserLoginLoading,
 } from '@/frontend/store/user/userSelectors'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
@@ -22,9 +22,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const isLogged = useSelector(selectUserIsLogged)
   const isLoading = useSelector(selectUserLoginLoading)
-  const hasError = useSelector(selectUserLoginHasError)
-
-  console.log({ isLogged })
+  const hasFailed = useSelector(selectUserLoginHasFailed)
 
   useEffect(() => {
     dispatch(verifyUserToken())
@@ -100,7 +98,7 @@ export default function LoginPage() {
       >
         Login
       </Button>
-      {hasError && <ErrorMessage color="error">Error message</ErrorMessage>}
+      {hasFailed && <ErrorMessage color="error">Error message</ErrorMessage>}
     </PageWrapper>
   )
 }

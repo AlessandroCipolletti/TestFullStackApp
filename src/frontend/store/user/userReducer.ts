@@ -16,7 +16,7 @@ export enum LoginStatus {
   IDLE = 'idle',
   LOADING = 'loading',
   EXPIRED = 'expired',
-  ERROR = 'error',
+  FAILED = 'error',
   LOGGED = 'logged',
 }
 
@@ -87,7 +87,7 @@ const userReducer = createSlice({
         setUser(state, action.payload)
       })
       .addCase(loginUser.rejected, (state) => {
-        state.loginStatus = LoginStatus.ERROR
+        state.loginStatus = LoginStatus.FAILED
       })
   },
 })
@@ -144,7 +144,9 @@ export const verifyUserToken = createAsyncThunk<
   z.infer<typeof VerifyUserTokenEndpoint.responseSchema>,
   void
 >('userActions/verifyUserToken', async (params, thunkAPI) => {
-  const [result, error] = await callEndpoint(VerifyUserTokenEndpoint, {})
+  const [result, error] = await callEndpoint(VerifyUserTokenEndpoint, {
+    callingToRefreshAccessToken: true,
+  })
 
   if (!result || !result.valid || !result.user) {
     emptyAccessTokenCookie()

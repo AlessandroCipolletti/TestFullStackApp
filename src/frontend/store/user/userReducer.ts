@@ -142,10 +142,10 @@ export const loginUser = createAsyncThunk<
 
 export const verifyUserToken = createAsyncThunk<
   z.infer<typeof VerifyUserTokenEndpoint.responseSchema>,
-  void
->('userActions/verifyUserToken', async (params, thunkAPI) => {
+  { canRetryWithRefreshToken?: boolean } | undefined
+>('userActions/verifyUserToken', async (params = {}, thunkAPI) => {
   const [result, error] = await callEndpoint(VerifyUserTokenEndpoint, {
-    callingToRefreshAccessToken: true,
+    canRetryWithRefreshToken: params.canRetryWithRefreshToken,
   })
 
   if (!result || !result.valid || !result.user) {

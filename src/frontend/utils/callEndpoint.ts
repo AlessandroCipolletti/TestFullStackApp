@@ -34,14 +34,15 @@ export const callEndpoint = async <
           body: z.infer<RequestSchema>
           headers?: Record<string, string>
         }) & {
-    callingToRefreshAccessToken?: boolean
+    token?: string
+    canRetryWithRefreshToken?: boolean
   }
 ): Promise<[z.infer<ResponseSchema> | false, Error | undefined]> => {
   const query = params && 'query' in params ? params.query : undefined
   const body = params && 'body' in params ? params.body : undefined
   const headers = params && 'headers' in params ? params.headers : undefined
-  const callingToRefreshAccessToken =
-    params.callingToRefreshAccessToken ?? false
+  const canRetryWithRefreshToken = params.canRetryWithRefreshToken ?? true
+  const token = params.token ?? getAccessTokenCookie()
 
   try {
     // Validate query parameters if schema is provided
@@ -62,10 +63,6 @@ export const callEndpoint = async <
     }
 
     const url = endpoint.url(query)
-    const token = callingToRefreshAccessToken
-      ? getRefreshTokenCookie()
-      : getAccessTokenCookie()
-
     const fetchOptions: RequestInit = {
       method: endpoint.method,
       headers: {
@@ -77,11 +74,11 @@ export const callEndpoint = async <
     }
 
     const response = await fetch(url, fetchOptions)
-    if (response.status === 401 && !callingToRefreshAccessToken) {
+    if (response.status === 401 && canRetryWithRefreshToken) {
       await refreshAccessToken()
       return callEndpoint(endpoint, {
         ...params,
-        callingToRefreshAccessToken: true,
+        canRetryWithRefreshToken: false,
       })
     }
     if (!response.ok) {
@@ -112,7 +109,8 @@ export const callEndpoint = async <
 
 const refreshAccessToken = async () => {
   const [result] = await callEndpoint(RefreshUserTokenEndpoint, {
-    callingToRefreshAccessToken: true,
+    canRetryWithRefreshToken: false,
+    token: getRefreshTokenCookie(),
   })
 
   if (result) {

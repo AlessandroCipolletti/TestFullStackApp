@@ -25,7 +25,7 @@ export default function LoginPage() {
   const hasFailed = useSelector(selectUserLoginHasFailed)
 
   useEffect(() => {
-    dispatch(verifyUserToken())
+    dispatch(verifyUserToken({ canRetryWithRefreshToken: false }))
   }, [dispatch])
 
   useEffect(() => {

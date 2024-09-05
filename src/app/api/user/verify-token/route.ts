@@ -1,7 +1,8 @@
 import { z } from 'zod'
-import VerifyUserTokenEndpoint from './VerifyUserTokenEndpoint'
+import VerifyUserTokenEndpoint from '@/endpoints/VerifyUserTokenEndpoint'
 import { NextResponse } from 'next/server'
-import { TokenisedUserInfo, verifyRequestToken } from '../utils'
+import TokenisedUserInfo from '@/endpoints/types/TokenisedUserInfo'
+import { verifyRequestToken } from '../utils'
 
 export async function POST(request: Request) {
   try {

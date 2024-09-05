@@ -8,7 +8,7 @@ import {
   selectUserLoginHasError,
   selectUserLoginLoading,
 } from '@/store/user/userSelectors'
-import LoginEndpoint from '@/app/api/user/login/LoginEndpoint'
+import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 const DEFAULT_PAGE_AFTER_LOGIN = '/dashboard'

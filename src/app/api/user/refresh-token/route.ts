@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import prisma from 'prisma/init'
-import RefreshUserTokenEndpoint from './RefreshUserTokenEndpoint'
+import RefreshUserTokenEndpoint from '../../../../endpoints/RefreshUserTokenEndpoint'
 import { NextResponse } from 'next/server'
 import { createUserAccessToken, verifyRequestToken } from '../utils'
 

@@ -1,6 +1,6 @@
 import z from 'zod'
-import { makeEndpoint } from '@/utils/makeEndpoint'
-import { TokenisedUserInfo } from '../utils'
+import { makeEndpoint } from './utils/makeEndpoint'
+import TokenisedUserInfo from './types/TokenisedUserInfo'
 
 const VerifyUserTokenEndpointRequestSchema = z.void()
 

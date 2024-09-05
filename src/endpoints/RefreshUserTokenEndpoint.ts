@@ -1,5 +1,5 @@
 import z from 'zod'
-import { makeEndpoint } from '@/utils/makeEndpoint'
+import { makeEndpoint } from './utils/makeEndpoint'
 
 const RefreshUserTokenEndpointRequestSchema = z.void()
 

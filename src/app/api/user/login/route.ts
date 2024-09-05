@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
-import LoginEndpoint from './LoginEndpoint'
+import LoginEndpoint from '../../../../endpoints/LoginEndpoint'
 import { createUserAccessToken, createUserRefreshToken } from '../utils'
 import { z } from 'zod'
 

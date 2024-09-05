@@ -2,7 +2,7 @@ import z from 'zod'
 import { NextResponse } from 'next/server'
 import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
-import CreateUserEndpoint from './CreateUserEndpoint'
+import CreateUserEndpoint from '../../../../endpoints/CreateUserEndpoint'
 import { createUserAccessToken, createUserRefreshToken } from '../utils'
 
 export async function POST(request: Request) {

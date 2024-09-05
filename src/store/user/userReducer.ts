@@ -1,9 +1,9 @@
 import { z } from 'zod'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import LoginEndpoint from '@/app/api/user/login/LoginEndpoint'
-import CreateUserEndpoint from '@/app/api/user/create/CreateUserEndpoint'
-import VerifyUserTokenEndpoint from '@/app/api/user/verify-token/VerifyUserTokenEndpoint'
-import { TokenisedUserInfo } from '@/app/api/user/utils'
+import LoginEndpoint from '@/endpoints/LoginEndpoint'
+import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
+import VerifyUserTokenEndpoint from '@/endpoints/VerifyUserTokenEndpoint'
+import TokenisedUserInfo from '@/endpoints/types/TokenisedUserInfo'
 import { callEndpoint } from '@/utils/callEndpoint'
 import {
   emptyAccessTokenCookie,

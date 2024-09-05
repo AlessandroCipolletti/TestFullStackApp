@@ -1,16 +1,9 @@
 import { z } from 'zod'
 import { SignJWT, jwtVerify } from 'jose'
 import { User } from '@prisma/client'
-
+import TokenisedUserInfo from '@/endpoints/types/TokenisedUserInfo'
 const accessTokenExpiry = '1h'
 const refreshTokenExpiry = '7d'
-
-export const TokenisedUserInfo = z.object({
-  id: z.string(),
-  email: z.string(),
-  firstName: z.string().nullable(),
-  lastName: z.string().nullable(),
-})
 
 export const createUserAccessToken = async (user: User) => {
   const userPublicInfo: z.infer<typeof TokenisedUserInfo> = {

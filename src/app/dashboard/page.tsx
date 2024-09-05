@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import NextLink from 'next/link'
 import { callEndpoint } from '@/utils/callEndpoint'
-import TestAuthApiEndpoint from '@/app/api/test-auth-api/TestAuthApiEndpoint'
+import TestAuthApiEndpoint from '@/endpoints/TestAuthApiEndpoint'
 
 export default function Dashboard() {
   const callSignedApi = useCallback(async () => {

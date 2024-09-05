@@ -1,5 +1,5 @@
 import z from 'zod'
-import { Endpoint } from '@/types/endpoint'
+import Endpoint from '../types/Endpoint'
 
 export const makeEndpoint = <
   QueryParams extends z.ZodType,

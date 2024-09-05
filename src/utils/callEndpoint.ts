@@ -1,11 +1,11 @@
 import z, { ZodVoid } from 'zod'
-import { Endpoint } from '@/types/endpoint'
+import Endpoint from '@/endpoints/types/Endpoint'
 import {
   getAccessTokenCookie,
   getRefreshTokenCookie,
   setAccessTokenCookie,
 } from '@/utils/loginToken'
-import RefreshUserTokenEndpoint from '@/app/api/user/refresh-token/RefreshUserTokenEndpoint'
+import RefreshUserTokenEndpoint from '@/endpoints/RefreshUserTokenEndpoint'
 
 export const callEndpoint = async <
   QueryParams extends z.ZodType,

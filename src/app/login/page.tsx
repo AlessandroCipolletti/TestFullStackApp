@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, KeyboardEvent } from 'react'
 import { Container, TextField, Button, Typography, styled } from '@mui/material'
 import { useDispatch, useSelector } from '@/store/hooks'
 import { loginUser } from '@/store/user/userReducer'
@@ -50,6 +50,12 @@ export default function LoginPage() {
     await dispatch(loginUser({ email, password }))
   }
 
+  const onEnter = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (canSubmit && event.key === 'Enter') {
+      handleSubmit()
+    }
+  }
+
   return (
     <PageWrapper maxWidth="sm">
       <Typography variant="h4" component="h1" gutterBottom>
@@ -61,6 +67,7 @@ export default function LoginPage() {
         fullWidth
         margin="normal"
         value={email}
+        onKeyDown={onEnter}
         onChange={(e) => setEmail(e.target.value)}
       />
       <TextField
@@ -70,6 +77,7 @@ export default function LoginPage() {
         margin="normal"
         type="password"
         value={password}
+        onKeyDown={onEnter}
         onChange={(e) => setPassword(e.target.value)}
       />
       <Button

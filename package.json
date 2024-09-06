@@ -10,7 +10,7 @@
     "prisma:migrate": "npx prisma migrate dev",
     "docker-compose-prod": "docker-compose -f docker-compose.prod.yml up --build",
     "check-types": "tsc --noEmit",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts,.tsx",
     "prepare": "husky init && echo 'npm run validate-commit' > .husky/pre-commit",
     "lint:commit": "eslint $(git diff --cached --diff-filter=AM --name-only | grep -E '\\.(js|jsx|ts|tsx)$' | xargs) --quiet",
     "validate-commit": "npm run lint:commit"

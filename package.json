@@ -10,7 +10,10 @@
     "prisma:migrate": "npx prisma migrate dev",
     "docker-compose-prod": "docker-compose -f docker-compose.prod.yml up --build",
     "check-types": "tsc --noEmit",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky init && echo 'npm run validate-commit' > .husky/pre-commit",
+    "lint:commit": "eslint $(git diff --cached --diff-filter=AM --name-only | grep -E '\\.(js|jsx|ts|tsx)$' | xargs) --quiet",
+    "validate-commit": "npm run lint:commit"
   },
   "dependencies": {
     "@emotion/cache": "latest",
@@ -49,6 +52,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.5",
     "prettier": "^3.3.3",
     "typescript": "latest"
   }

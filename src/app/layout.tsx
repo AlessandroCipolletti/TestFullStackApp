@@ -1,2 +1,2 @@
-export { default } from '@/frontend/pages/HomeLayout'
-export * from '@/frontend/pages/HomeLayout'
+export { default } from '@/frontend/pages/home/HomeLayout'
+export * from '@/frontend/pages/home/HomeLayout'

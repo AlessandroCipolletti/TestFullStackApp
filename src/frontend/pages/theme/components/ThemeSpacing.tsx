@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import theme from '@/frontend/theme'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 
 const SPACING_KEYS = [
   0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24, 28,
@@ -33,16 +34,16 @@ const SpacingWrapper = styled(Box)`
   padding: 10px;
 `
 
-const SpacingBox = styled(Box)<{ width: string }>(({ width }) => ({
-  width,
-  height: 10,
-  display: 'inline-block',
-  backgroundColor: theme.palette.divider,
-  margin: '10px 0px',
-}))
+const SpacingBox = styled(Box)<{ width: string }>`
+  ${({ width }) => width};
+  height: 10px;
+  display: inline-block;
+  background-color: ${({ theme }) => theme.palette.divider};
+  margin: 10px 0px;
+`
 
-const SpacingLabel = styled.span`
-  color: ${theme.palette.text.primary};
+const SpacingLabel = styled(Typography)`
+  color: ${({ theme }) => theme.palette.text.primary};
   font-size: 0.8rem;
   line-height: 1.4;
 `

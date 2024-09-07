@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import theme from '@/frontend/theme'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import getObjectKeys from '@/utils/getObjectKeys'
@@ -41,18 +41,18 @@ const ColorWrapper = styled(Box)`
   padding: 10px;
 `
 
-const Color = styled(Box)<{ color: string }>(({ color }) => ({
-  width: 50,
-  height: 50,
-  backgroundColor: color,
-  display: 'inline-block',
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.shadows[2],
-  margin: '10px 0px',
-}))
+const Color = styled(Box)<{ color: string }>`
+  width: 50px;
+  height: 50px;
+  background-color: ${({ color }) => color};
+  display: inline-block;
+  border-radius: ${({ theme }) => theme.shape.borderRadius};
+  box-shadow: ${({ theme }) => theme.shadows[2]};
+  margin: 10px 0px;
+`
 
-const ColorLabel = styled.span`
-  color: ${theme.palette.text.primary};
+const ColorLabel = styled(Typography)`
+  color: ${({ theme }) => theme.palette.text.primary};
   font-size: 0.8rem;
   line-height: 1.4;
 `

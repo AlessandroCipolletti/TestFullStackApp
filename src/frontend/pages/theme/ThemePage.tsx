@@ -1,6 +1,5 @@
 'use client'
-import theme from '@/frontend/theme'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import ControlledAccordion from '@/frontend/components/ControlledAccordion'
@@ -10,7 +9,7 @@ import ThemeSpacing from './components/ThemeSpacing'
 import ThemeTypography from './components/ThemeTypography'
 
 export default function ThemePage() {
-  console.log(theme)
+  // console.log(theme)
   const items = [
     {
       title: 'Palette',
@@ -47,6 +46,6 @@ const PageWrapper = styled(Container)`
   padding-top: 40px;
 `
 
-const PageTitle = styled(Typography)`
-  margin-bottom: ${theme.spacing(4)};
-`
+const PageTitle = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+}))

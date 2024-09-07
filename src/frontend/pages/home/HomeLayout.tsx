@@ -4,8 +4,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from '@/frontend/theme'
 
-export default function HoomLayout(props: { children: React.ReactNode }) {
-  console.log({ theme })
+export default function HomeLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>

@@ -10,7 +10,6 @@ const SPACING_KEYS = [
 
 export default function ThemeSpacing() {
   const renderSpacing = useCallback((spacingKey: number) => {
-    console.log(spacingKey)
     const spacing = theme.spacing(spacingKey)
 
     return (

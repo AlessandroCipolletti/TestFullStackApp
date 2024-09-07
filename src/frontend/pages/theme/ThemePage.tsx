@@ -7,6 +7,7 @@ import ControlledAccordion from '@/frontend/components/ControlledAccordion'
 import ThemePalette from './components/ThemePalette'
 import ThemeShadows from './components/ThemeShadows'
 import ThemeSpacing from './components/ThemeSpacing'
+import ThemeTypography from './components/ThemeTypography'
 
 export default function ThemePage() {
   console.log(theme)
@@ -14,6 +15,10 @@ export default function ThemePage() {
     {
       title: 'Palette',
       content: <ThemePalette />,
+    },
+    {
+      title: 'Typography',
+      content: <ThemeTypography />,
     },
     {
       title: 'Shadows',

@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import ControlledAccordion from '@/frontend/components/ControlledAccordion'
 import ThemePalette from './components/ThemePalette'
 import ThemeShadows from './components/ThemeShadows'
+import ThemeSpacing from './components/ThemeSpacing'
 
 export default function ThemePage() {
   console.log(theme)
@@ -17,6 +18,10 @@ export default function ThemePage() {
     {
       title: 'Shadows',
       content: <ThemeShadows />,
+    },
+    {
+      title: 'Spacing',
+      content: <ThemeSpacing />,
     },
   ]
 
@@ -33,7 +38,7 @@ const PageWrapper = styled(Container)`
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  max-width: 800px;
+  max-width: 900px;
   padding-top: 40px;
 `
 

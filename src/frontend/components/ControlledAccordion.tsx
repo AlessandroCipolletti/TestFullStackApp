@@ -1,9 +1,12 @@
 import { ReactNode, SyntheticEvent, useState } from 'react'
+import styled from '@emotion/styled'
 import Typography from '@mui/material/Typography'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+
+import Box from '@mui/material/Box'
 
 type AccordionItem = {
   title: string
@@ -25,7 +28,7 @@ export default function ControlledAccordion({
     }
 
   return (
-    <>
+    <AccordionWrapper>
       {items.map(({ title, content }) => (
         <Accordion
           key={title}
@@ -42,6 +45,10 @@ export default function ControlledAccordion({
           <AccordionDetails>{content}</AccordionDetails>
         </Accordion>
       ))}
-    </>
+    </AccordionWrapper>
   )
 }
+
+const AccordionWrapper = styled(Box)`
+  width: 100%;
+`

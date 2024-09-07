@@ -5,6 +5,7 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import ControlledAccordion from '@/frontend/components/ControlledAccordion'
 import ThemePalette from './components/ThemePalette'
+import ThemeShadows from './components/ThemeShadows'
 
 export default function ThemePage() {
   console.log(theme)
@@ -12,6 +13,10 @@ export default function ThemePage() {
     {
       title: 'Palette',
       content: <ThemePalette />,
+    },
+    {
+      title: 'Shadows',
+      content: <ThemeShadows />,
     },
   ]
 

@@ -1,6 +1,6 @@
 'use client'
 import { Roboto } from 'next/font/google'
-import { createTheme } from '@mui/material/styles'
+import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -8,24 +8,34 @@ const roboto = Roboto({
   display: 'swap',
 })
 
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-  typography: {
-    fontFamily: roboto.style.fontFamily,
-  },
-  components: {
-    MuiAlert: {
-      styleOverrides: {
-        root: ({ ownerState }) => ({
-          ...(ownerState.severity === 'info' && {
-            backgroundColor: '#60a5fa',
+const prefersDarkMode =
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-color-scheme: dark)').matches &&
+  false
+
+const theme = responsiveFontSizes(
+  createTheme({
+    colorSchemes: {
+      dark: prefersDarkMode,
+    },
+    // palette: {
+    //   mode: 'light',
+    // },
+    typography: {
+      fontFamily: roboto.style.fontFamily,
+    },
+    components: {
+      MuiAlert: {
+        styleOverrides: {
+          root: ({ ownerState }) => ({
+            ...(ownerState.severity === 'info' && {
+              backgroundColor: '#60a5fa',
+            }),
           }),
-        }),
+        },
       },
     },
-  },
-})
+  })
+)
 
 export default theme

@@ -7,6 +7,7 @@ import ThemePalette from './components/ThemePalette'
 import ThemeShadows from './components/ThemeShadows'
 import ThemeSpacing from './components/ThemeSpacing'
 import ThemeTypography from './components/ThemeTypography'
+import ThemeColors from './components/ThemeColors'
 
 export default function ThemePage() {
   // console.log(theme)
@@ -14,6 +15,10 @@ export default function ThemePage() {
     {
       title: 'Palette',
       content: <ThemePalette />,
+    },
+    {
+      title: 'Colors',
+      content: <ThemeColors />,
     },
     {
       title: 'Typography',

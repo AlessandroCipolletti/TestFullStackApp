@@ -1,35 +1,32 @@
 import { useCallback } from 'react'
-import theme from '@/frontend/theme'
+import * as Colors from '@mui/material/colors'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import getObjectKeys from '@/utils/getObjectKeys'
 
-export default function ThemePalette() {
-  const renderPaletteColor = useCallback(
-    (color: keyof typeof theme.palette) => {
-      const paletteColor = theme.palette[color]
-      if (typeof paletteColor !== 'object') {
-        return null
-      }
+export default function ThemeColors() {
+  const renderColor = useCallback((color: keyof typeof Colors) => {
+    const colorShades = Colors[color]
+    if (typeof colorShades !== 'object') {
+      return null
+    }
 
-      return (
-        <Box key={color}>
-          <Typography variant="h6">{color}</Typography>
-          {getObjectKeys(paletteColor).map((key) => (
-            <ColorWrapper key={key}>
-              <ColorLabel>{key}</ColorLabel>
-              <Color color={paletteColor[key]} />
-              <ColorLabel>{paletteColor[key]}</ColorLabel>
-            </ColorWrapper>
-          ))}
-        </Box>
-      )
-    },
-    []
-  )
+    return (
+      <Box key={color}>
+        <Typography variant="h6">{color}</Typography>
+        {getObjectKeys(colorShades).map((key) => (
+          <ColorWrapper key={key}>
+            <ColorLabel>{key}</ColorLabel>
+            <Color color={colorShades[key]} />
+            <ColorLabel>{colorShades[key]}</ColorLabel>
+          </ColorWrapper>
+        ))}
+      </Box>
+    )
+  }, [])
 
-  return <Box>{getObjectKeys(theme.palette).map(renderPaletteColor)}</Box>
+  return <Box>{getObjectKeys(Colors).map(renderColor)}</Box>
 }
 
 const ColorWrapper = styled(Box)`

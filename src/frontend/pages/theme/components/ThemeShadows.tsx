@@ -40,7 +40,7 @@ const ShadowBox = styled(Box)<{ shadow: string }>`
   height: 50px;
   background-color: ${({ theme }) => theme.palette.background.paper};
   display: inline-block;
-  border-radius: ${({ theme }) => theme.shape.borderRadius};
+  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   box-shadow: ${({ shadow }) => shadow};
   margin: 10px 0px;
 `

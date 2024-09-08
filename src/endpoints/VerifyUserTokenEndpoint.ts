@@ -1,12 +1,12 @@
 import z from 'zod'
+import { UserSchema } from '@/backend/schemas'
 import { makeEndpoint } from './utils/makeEndpoint'
-import TokenisedUserInfo from './types/TokenisedUserInfo'
 
 const VerifyUserTokenEndpointRequestSchema = z.void()
 
 const VerifyUserTokenEndpointResponseSchema = z.object({
   valid: z.boolean(),
-  user: TokenisedUserInfo.optional(),
+  user: UserSchema.optional(),
   error: z.string().optional(),
 })
 

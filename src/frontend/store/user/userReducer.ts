@@ -1,9 +1,9 @@
 import { z } from 'zod'
+import { User } from '@prisma/client'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
 import VerifyUserTokenEndpoint from '@/endpoints/VerifyUserTokenEndpoint'
-import TokenisedUserInfo from '@/endpoints/types/TokenisedUserInfo'
 import { callEndpoint } from '@/frontend/utils/callEndpoint'
 import {
   emptyAccessTokenCookie,
@@ -93,7 +93,7 @@ const userReducer = createSlice({
 })
 
 export const createNewUser = createAsyncThunk<
-  z.infer<typeof TokenisedUserInfo>,
+  User,
   z.infer<typeof CreateUserEndpoint.requestSchema>
 >('userActions/callCreateUserEndpoint', async (params, thunkAPI) => {
   const [result, error] = await callEndpoint(CreateUserEndpoint, {
@@ -109,15 +109,13 @@ export const createNewUser = createAsyncThunk<
   setAccessTokenCookie(accessToken)
   setRefreshTokenCookie(refreshToken)
 
-  const payload: z.infer<typeof TokenisedUserInfo> = JSON.parse(
-    atob(accessToken.split('.')[1])
-  )
+  const payload: User = JSON.parse(atob(accessToken.split('.')[1]))
 
   return payload
 })
 
 export const loginUser = createAsyncThunk<
-  z.infer<typeof TokenisedUserInfo>,
+  User,
   z.infer<typeof LoginEndpoint.requestSchema>
 >('userActions/callLoginEndpoint', async (params, thunkAPI) => {
   const [result, error] = await callEndpoint(LoginEndpoint, {
@@ -133,9 +131,7 @@ export const loginUser = createAsyncThunk<
   setAccessTokenCookie(accessToken)
   setRefreshTokenCookie(refreshToken)
 
-  const payload: z.infer<typeof TokenisedUserInfo> = JSON.parse(
-    atob(accessToken.split('.')[1])
-  )
+  const payload: User = JSON.parse(atob(accessToken.split('.')[1]))
 
   return payload
 })

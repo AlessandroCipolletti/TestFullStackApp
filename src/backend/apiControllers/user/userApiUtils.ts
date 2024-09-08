@@ -1,20 +1,11 @@
-import { z } from 'zod'
 import { SignJWT, jwtVerify } from 'jose'
 import { User } from '@prisma/client'
-import TokenisedUserInfo from '@/endpoints/types/TokenisedUserInfo'
 
 const accessTokenExpiry = '1h'
 const refreshTokenExpiry = '7d'
 
 export const createUserAccessToken = async (user: User) => {
-  const userPublicInfo: z.infer<typeof TokenisedUserInfo> = {
-    id: user.id,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-  }
-
-  const token = await new SignJWT({ user: userPublicInfo })
+  const token = await new SignJWT({ user })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime(accessTokenExpiry)
     .sign(new TextEncoder().encode(process.env.JWT_SECRET!))

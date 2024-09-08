@@ -4,6 +4,7 @@ import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
 import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
 import { createUserAccessToken, createUserRefreshToken } from './userApiUtils'
+import logger from '@/backend/utils/logger'
 
 export async function POST(request: Request) {
   const {
@@ -13,24 +14,29 @@ export async function POST(request: Request) {
     lastName,
   }: z.infer<typeof CreateUserEndpoint.requestSchema> = await request.json()
 
-  // Check if the email is already registered
+  // Check if the email is already in use
   const existingUser = await prisma.user.findUnique({
     where: { email },
   })
 
   if (existingUser) {
-    return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
+    logger.info({ email }, 'create user attempt with mail already in use')
+    return NextResponse.json({ error: 'Email already in use' }, { status: 400 })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
   const newUser = await prisma.user.create({
     data: {
       email,
-      password: hashedPassword,
       firstName,
       lastName,
+      passwords: {
+        create: [{ password: hashedPassword }],
+      },
     },
   })
+
+  logger.info({ userId: newUser.id, email: newUser.email }, 'new user created')
 
   const accessToken = await createUserAccessToken(newUser)
   const refreshToken = await createUserRefreshToken(newUser)

@@ -4,6 +4,7 @@ import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import { createUserAccessToken, createUserRefreshToken } from './userApiUtils'
+import logger from '@/backend/utils/logger'
 
 export async function POST(request: Request) {
   const { email, password }: z.infer<typeof LoginEndpoint.requestSchema> =
@@ -11,13 +12,31 @@ export async function POST(request: Request) {
 
   const user = await prisma.user.findUnique({ where: { email } })
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  if (!user) {
+    logger.info({ email }, 'login attempt with unused email')
     return NextResponse.json(
       { message: 'Invalid email or password' },
       { status: 401 }
     )
   }
 
+  const userPassword = await prisma.userPassword.findFirst({
+    where: { userId: user.id },
+    orderBy: { createdAt: 'desc' },
+  })
+
+  if (
+    !userPassword ||
+    !(await bcrypt.compare(password, userPassword.password))
+  ) {
+    logger.info({ email, userId: user.id }, 'login failed')
+    return NextResponse.json(
+      { message: 'Invalid email or password' },
+      { status: 401 }
+    )
+  }
+
+  logger.info({ email, userId: user.id }, 'login successful')
   const accessToken = await createUserAccessToken(user)
   const refreshToken = await createUserRefreshToken(user)
 

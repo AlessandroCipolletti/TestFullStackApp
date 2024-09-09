@@ -26,13 +26,17 @@ generator zod {
 }
 
 model User {
-  id        String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email     String         @unique
-  passwords UserPassword[]
-  firstName String?
-  lastName  String?
-  createdAt DateTime       @default(now())
-  updatedAt DateTime?      @updatedAt
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email       String         @unique
+  firstName   String?
+  lastName    String?
+  disabled    Boolean        @default(false)
+  deleted     Boolean        @default(false)
+  blacklisted Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime?      @updatedAt
+  passwords   UserPassword[]
+  sessions    UserSession[]
 }
 
 model UserPassword {
@@ -43,4 +47,25 @@ model UserPassword {
 
   User   User   @relation(fields: [userId], references: [id])
   userId String @db.Uuid
+}
+
+model UserSession {
+  id           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  refreshToken String
+  duration     String
+  disabled     Boolean             @default(false)
+  createdAt    DateTime            @default(now())
+  accesses     UserSessionAccess[]
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String @db.Uuid
+}
+
+model UserSessionAccess {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  duration  String
+  createdAt DateTime @default(now())
+
+  UserSession   UserSession @relation(fields: [userSessionId], references: [id])
+  userSessionId String      @db.Uuid
 }

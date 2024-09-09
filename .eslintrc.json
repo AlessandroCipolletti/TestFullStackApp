@@ -5,6 +5,9 @@
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
+  "ignorePatterns": [
+    "src/backend/schemas/**/*"
+  ],
   "settings": {
     "import/resolver": {
       "typescript": {

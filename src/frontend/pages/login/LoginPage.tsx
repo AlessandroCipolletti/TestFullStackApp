@@ -56,6 +56,7 @@ export default function LoginPage() {
   }, [isLoading, isLogged, email, password])
 
   const handleSubmit = async () => {
+    // await dispatch(createNewUser({ email, password, firstName: 'firstName' }))
     await dispatch(loginUser({ email, password }))
   }
 

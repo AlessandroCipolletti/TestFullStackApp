@@ -1,8 +1,8 @@
-import { SignJWT, jwtVerify } from 'jose'
+import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { User } from '@prisma/client'
 
-const accessTokenExpiry = '1h'
-const refreshTokenExpiry = '7d'
+export const accessTokenExpiry = '1h'
+export const refreshTokenExpiry = '7d'
 
 export const createUserAccessToken = async (user: User) => {
   const token = await new SignJWT({ user })
@@ -22,18 +22,20 @@ export const createUserRefreshToken = async (user: User) => {
   return token
 }
 
-export const verifyRequestToken = async (request: Request) => {
+export const verifyRequestToken = async (
+  request: Request
+): Promise<[false | JWTPayload, string]> => {
   try {
     const authHeader =
       request.headers.get('Authorization') ||
       request.headers.get('authorization')
     if (!authHeader) {
-      return false
+      return [false, '']
     }
 
     const token = authHeader.split(' ')[1] // `Bearer ${token}`
     if (!token) {
-      return false
+      return [false, '']
     }
 
     const encoder = new TextEncoder()
@@ -42,12 +44,12 @@ export const verifyRequestToken = async (request: Request) => {
       encoder.encode(process.env.JWT_SECRET!)
     )
     if (typeof payload !== 'object') {
-      return false
+      return [false, '']
     }
 
-    return payload
+    return [payload, token]
   } catch (e) {
-    return false
+    return [false, '']
   }
 }
 

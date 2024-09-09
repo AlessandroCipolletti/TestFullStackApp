@@ -3,7 +3,12 @@ import { NextResponse } from 'next/server'
 import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
 import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
-import { createUserAccessToken, createUserRefreshToken } from './userApiUtils'
+import {
+  createUserAccessToken,
+  createUserRefreshToken,
+  accessTokenExpiry,
+  refreshTokenExpiry,
+} from './userApiUtils'
 import logger from '@/backend/utils/logger'
 
 export async function POST(request: Request) {
@@ -40,6 +45,21 @@ export async function POST(request: Request) {
 
   const accessToken = await createUserAccessToken(newUser)
   const refreshToken = await createUserRefreshToken(newUser)
+
+  await prisma.userSession.create({
+    data: {
+      userId: newUser.id,
+      refreshToken,
+      duration: refreshTokenExpiry,
+      accesses: {
+        create: [
+          {
+            duration: accessTokenExpiry,
+          },
+        ],
+      },
+    },
+  })
 
   const response: z.infer<typeof CreateUserEndpoint.responseSchema> = {
     accessToken,

@@ -8,7 +8,7 @@ export async function middleware(request: Request) {
     return NextResponse.next()
   }
 
-  const decodedToken = await verifyRequestToken(request)
+  const [decodedToken] = await verifyRequestToken(request)
   if (decodedToken) {
     return NextResponse.next()
   }

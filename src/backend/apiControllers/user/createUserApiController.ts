@@ -2,14 +2,9 @@ import z from 'zod'
 import { NextResponse } from 'next/server'
 import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
-import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
-import {
-  createUserAccessToken,
-  createUserRefreshToken,
-  accessTokenExpiry,
-  refreshTokenExpiry,
-} from './userApiUtils'
 import logger from '@/backend/utils/logger'
+import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
+import { createNewUserSession } from './userApiUtils'
 
 export async function POST(request: Request) {
   const {
@@ -25,7 +20,10 @@ export async function POST(request: Request) {
   })
 
   if (existingUser) {
-    logger.info({ email }, 'create user attempt with mail already in use')
+    logger.warn(
+      { userId: existingUser.id, email, msgCode: '001-005' },
+      'Create user attempt with mail already in use'
+    )
     return NextResponse.json({ error: 'Email already in use' }, { status: 400 })
   }
 
@@ -41,26 +39,12 @@ export async function POST(request: Request) {
     },
   })
 
-  logger.info({ userId: newUser.id, email: newUser.email }, 'new user created')
+  logger.info(
+    { userId: newUser.id, email: newUser.email, msgCode: '001-006' },
+    'New user created'
+  )
 
-  const accessToken = await createUserAccessToken(newUser)
-  const refreshToken = await createUserRefreshToken(newUser)
-
-  await prisma.userSession.create({
-    data: {
-      userId: newUser.id,
-      refreshToken,
-      duration: refreshTokenExpiry,
-      accesses: {
-        create: [
-          {
-            accessToken,
-            duration: accessTokenExpiry,
-          },
-        ],
-      },
-    },
-  })
+  const { accessToken, refreshToken } = await createNewUserSession(newUser)
 
   const response: z.infer<typeof CreateUserEndpoint.responseSchema> = {
     accessToken,

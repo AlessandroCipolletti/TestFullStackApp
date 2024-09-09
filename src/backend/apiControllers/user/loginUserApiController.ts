@@ -3,13 +3,8 @@ import { NextResponse } from 'next/server'
 import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
-import {
-  createUserAccessToken,
-  createUserRefreshToken,
-  accessTokenExpiry,
-  refreshTokenExpiry,
-} from './userApiUtils'
 import logger from '@/backend/utils/logger'
+import { createNewUserSession } from './userApiUtils'
 
 export async function POST(request: Request) {
   const { email, password }: z.infer<typeof LoginEndpoint.requestSchema> =
@@ -18,7 +13,10 @@ export async function POST(request: Request) {
   const user = await prisma.user.findUnique({ where: { email } })
 
   if (!user) {
-    logger.info({ email }, 'login attempt with unused email')
+    logger.info(
+      { email, msgCode: '001-001' },
+      'Login attempt with unused email'
+    )
     return NextResponse.json(
       { message: 'Invalid email or password' },
       { status: 401 }
@@ -34,36 +32,19 @@ export async function POST(request: Request) {
     !userPassword ||
     !(await bcrypt.compare(password, userPassword.password))
   ) {
-    logger.info({ email, userId: user.id }, 'login failed')
+    logger.warn({ email, userId: user.id, msgCode: '001-002' }, 'Login failed')
     return NextResponse.json(
       { message: 'Invalid email or password' },
       { status: 401 }
     )
   }
 
-  logger.info({ email, userId: user.id }, 'login successful')
-  const accessToken = await createUserAccessToken(user)
-  const refreshToken = await createUserRefreshToken(user)
-
-  const userSession = await prisma.userSession.create({
-    data: {
-      userId: user.id,
-      refreshToken,
-      duration: refreshTokenExpiry,
-      accesses: {
-        create: [
-          {
-            accessToken,
-            duration: accessTokenExpiry,
-          },
-        ],
-      },
-    },
-  })
   logger.info(
-    { email, userId: user.id, sessionId: userSession.id },
-    'new user session created'
+    { email, userId: user.id, msgCode: '001-003' },
+    'Login successful'
   )
+
+  const { accessToken, refreshToken } = await createNewUserSession(user)
 
   const response: z.infer<typeof LoginEndpoint.responseSchema> = {
     accessToken,

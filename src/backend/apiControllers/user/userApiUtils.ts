@@ -1,8 +1,43 @@
 import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { User } from '@prisma/client'
+import prisma from 'prisma/init'
+import logger from '@/backend/utils/logger'
 
 export const accessTokenExpiry = '1h'
 export const refreshTokenExpiry = '7d'
+
+export const createNewUserSession = async (user: User) => {
+  const accessToken = await createUserAccessToken(user)
+  const refreshToken = await createUserRefreshToken(user)
+
+  const userSession = await prisma.userSession.create({
+    data: {
+      userId: user.id,
+      refreshToken,
+      duration: refreshTokenExpiry,
+      accesses: {
+        create: [
+          {
+            accessToken,
+            duration: accessTokenExpiry,
+          },
+        ],
+      },
+    },
+  })
+
+  logger.info(
+    {
+      email: user.email,
+      userId: user.id,
+      sessionId: userSession.id,
+      msgCode: '001-004',
+    },
+    'New user session created'
+  )
+
+  return { accessToken, refreshToken }
+}
 
 export const createUserAccessToken = async (user: User) => {
   const token = await new SignJWT({ user })
@@ -24,18 +59,18 @@ export const createUserRefreshToken = async (user: User) => {
 
 export const verifyRequestToken = async (
   request: Request
-): Promise<[false | JWTPayload, string]> => {
+): Promise<{ decodedToken: JWTPayload | false; token: string }> => {
   try {
     const authHeader =
       request.headers.get('Authorization') ||
       request.headers.get('authorization')
     if (!authHeader) {
-      return [false, '']
+      return { decodedToken: false, token: '' }
     }
 
     const token = authHeader.split(' ')[1] // `Bearer ${token}`
     if (!token) {
-      return [false, '']
+      return { decodedToken: false, token: '' }
     }
 
     const encoder = new TextEncoder()
@@ -44,12 +79,12 @@ export const verifyRequestToken = async (
       encoder.encode(process.env.JWT_SECRET!)
     )
     if (typeof payload !== 'object') {
-      return [false, '']
+      return { decodedToken: false, token }
     }
 
-    return [payload, token]
+    return { decodedToken: payload, token }
   } catch (e) {
-    return [false, '']
+    return { decodedToken: false, token: '' }
   }
 }
 

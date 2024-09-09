@@ -5,7 +5,7 @@ import {
   selectUserLoginLoading,
   selectUserLoginHasError,
 } from '@/frontend/store/user/userSelectors'
-import { verifyUserToken } from '@/frontend/store/user/userReducer'
+import { verifyUserToken } from '@/frontend/store/user/userActions'
 import { useDispatch, useSelector } from '@/frontend/store/hooks'
 import { usePathname, useRouter } from 'next/navigation'
 

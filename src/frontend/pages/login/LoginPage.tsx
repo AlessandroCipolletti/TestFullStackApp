@@ -3,14 +3,13 @@ import { useState, useMemo, useEffect, KeyboardEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Container, TextField, Button, Typography, styled } from '@mui/material'
 import { useDispatch, useSelector } from '@/frontend/store/hooks'
-import { loginUser } from '@/frontend/store/user/userReducer'
+import { loginUser, verifyUserToken } from '@/frontend/store/user/userActions'
 import {
   selectUserIsLogged,
   selectUserLoginHasFailed,
   selectUserLoginLoading,
 } from '@/frontend/store/user/userSelectors'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
-import { verifyUserToken } from '@/frontend/store/user/userReducer'
 
 const DEFAULT_PAGE_AFTER_LOGIN = '/dashboard'
 

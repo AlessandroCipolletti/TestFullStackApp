@@ -1,43 +1,8 @@
 import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { User } from '@prisma/client'
-import prisma from 'prisma/init'
-import logger from '@/backend/utils/logger'
 
 export const accessTokenExpiry = '1h'
 export const refreshTokenExpiry = '7d'
-
-export const createNewUserSession = async (user: User) => {
-  const accessToken = await createUserAccessToken(user)
-  const refreshToken = await createUserRefreshToken(user)
-
-  const userSession = await prisma.userSession.create({
-    data: {
-      userId: user.id,
-      refreshToken,
-      duration: refreshTokenExpiry,
-      accesses: {
-        create: [
-          {
-            accessToken,
-            duration: accessTokenExpiry,
-          },
-        ],
-      },
-    },
-  })
-
-  logger.info(
-    {
-      email: user.email,
-      userId: user.id,
-      sessionId: userSession.id,
-      msgCode: '001-004',
-    },
-    'New user session created'
-  )
-
-  return { accessToken, refreshToken }
-}
 
 export const createUserAccessToken = async (user: User) => {
   const token = await new SignJWT({ user })
@@ -49,7 +14,7 @@ export const createUserAccessToken = async (user: User) => {
 }
 
 export const createUserRefreshToken = async (user: User) => {
-  const token = await new SignJWT({ userId: user.id })
+  const token = await new SignJWT({ user })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime(refreshTokenExpiry)
     .sign(new TextEncoder().encode(process.env.JWT_SECRET!))

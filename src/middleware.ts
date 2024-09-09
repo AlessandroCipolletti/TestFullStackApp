@@ -1,14 +1,18 @@
 import { NextResponse } from 'next/server'
-import { verifyRequestToken } from '@/backend/apiControllers/user/userApiUtils'
+import { verifyRequestToken } from '@/backend/apiControllers/user/userTokenUtils'
 
-const WHITE_LISTED_API = ['/api/user/login', '/api/user/create']
+const WHITE_LISTED_API = [
+  '/api/user/login',
+  '/api/user/create',
+  '/api/user/verify-token',
+]
 
 export async function middleware(request: Request) {
   if (WHITE_LISTED_API.some((path) => request.url.includes(path))) {
     return NextResponse.next()
   }
 
-  const [decodedToken] = await verifyRequestToken(request)
+  const { decodedToken } = await verifyRequestToken(request)
   if (decodedToken) {
     return NextResponse.next()
   }

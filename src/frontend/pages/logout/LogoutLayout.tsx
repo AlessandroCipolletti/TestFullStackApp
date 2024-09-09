@@ -1,11 +1,11 @@
 import React, { Suspense, ReactNode } from 'react'
 import StoreProvider from '@/frontend/store/StoreProvider'
 
-type LoginLayoutProps = {
+type LogoutLayoutProps = {
   children: ReactNode
 }
 
-export default function LoginLayout({ children }: LoginLayoutProps) {
+export default function LogoutLayout({ children }: LogoutLayoutProps) {
   return (
     <StoreProvider>
       <Suspense>{children}</Suspense>

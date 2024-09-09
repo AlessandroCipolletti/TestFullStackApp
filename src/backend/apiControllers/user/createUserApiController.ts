@@ -4,7 +4,7 @@ import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
 import logger from '@/backend/utils/logger'
 import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
-import { createNewUserSession } from './userApiUtils'
+import { createNewUserSession } from './userSessionUtils'
 
 export async function POST(request: Request) {
   const {
@@ -38,13 +38,12 @@ export async function POST(request: Request) {
       },
     },
   })
+  const { accessToken, refreshToken } = await createNewUserSession(newUser)
 
   logger.info(
     { userId: newUser.id, email: newUser.email, msgCode: '001-006' },
     'New user created'
   )
-
-  const { accessToken, refreshToken } = await createNewUserSession(newUser)
 
   const response: z.infer<typeof CreateUserEndpoint.responseSchema> = {
     accessToken,

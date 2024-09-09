@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
 import VerifyUserTokenEndpoint from '@/endpoints/VerifyUserTokenEndpoint'
+import LogoutEndpoint from '@/endpoints/LogoutEndpoint'
 import { callEndpoint } from '@/frontend/utils/callEndpoint'
 import {
   emptyAccessTokenCookie,
@@ -95,7 +96,7 @@ const userReducer = createSlice({
 export const createNewUser = createAsyncThunk<
   User,
   z.infer<typeof CreateUserEndpoint.requestSchema>
->('userActions/callCreateUserEndpoint', async (params, thunkAPI) => {
+>('userActions/createNewUser', async (params, thunkAPI) => {
   const [result, error] = await callEndpoint(CreateUserEndpoint, {
     body: params,
   })
@@ -117,7 +118,7 @@ export const createNewUser = createAsyncThunk<
 export const loginUser = createAsyncThunk<
   User,
   z.infer<typeof LoginEndpoint.requestSchema>
->('userActions/callLoginEndpoint', async (params, thunkAPI) => {
+>('userActions/loginUser', async (params, thunkAPI) => {
   const [result, error] = await callEndpoint(LoginEndpoint, {
     body: params,
   })
@@ -145,18 +146,24 @@ export const verifyUserToken = createAsyncThunk<
   })
 
   if (!result || !result.valid || !result.user) {
-    emptyAccessTokenCookie()
-    emptyRefreshTokenCookie()
     return thunkAPI.rejectWithValue(error?.message ?? 'Invalid token')
   }
 
   return result
 })
 
-// TODO onLogout:
-// if (!response.ok && response.status === 401) {
-//   emptyAccessTokenCookie()
-//   emptyRefreshTokenCookie()
-// }
+export const logoutUser = createAsyncThunk<
+  void,
+  z.infer<typeof LogoutEndpoint.requestSchema>
+>('userActions/logoutUser', async (params, thunkAPI) => {
+  const [result, error] = await callEndpoint(LogoutEndpoint, {})
+
+  if (!result) {
+    return thunkAPI.rejectWithValue(error?.message ?? 'Unknown error')
+  }
+
+  emptyAccessTokenCookie()
+  emptyRefreshTokenCookie()
+})
 
 export default userReducer.reducer

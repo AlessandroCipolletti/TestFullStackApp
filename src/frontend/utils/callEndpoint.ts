@@ -1,6 +1,8 @@
 import z, { ZodVoid } from 'zod'
 import Endpoint from '@/endpoints/types/Endpoint'
 import {
+  emptyAccessTokenCookie,
+  emptyRefreshTokenCookie,
   getAccessTokenCookie,
   getRefreshTokenCookie,
   setAccessTokenCookie,
@@ -116,6 +118,8 @@ const refreshAccessToken = async () => {
   if (result) {
     setAccessTokenCookie(result.accessToken)
   } else {
+    emptyAccessTokenCookie()
+    emptyRefreshTokenCookie()
     document.location.href = '/login?redirect=' + document.location.pathname
   }
 }

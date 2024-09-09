@@ -4,7 +4,7 @@ import prisma from 'prisma/init'
 import bcrypt from 'bcryptjs'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import logger from '@/backend/utils/logger'
-import { createNewUserSession } from './userApiUtils'
+import { createNewUserSession } from './userSessionUtils'
 
 export async function POST(request: Request) {
   const { email, password }: z.infer<typeof LoginEndpoint.requestSchema> =

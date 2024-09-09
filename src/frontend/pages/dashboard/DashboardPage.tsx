@@ -11,9 +11,9 @@ import TestAuthApiEndpoint from '@/endpoints/TestAuthApiEndpoint'
 export default function DashboardPage() {
   const callSignedApi = useCallback(async () => {
     await callEndpoint(TestAuthApiEndpoint, {})
-    setTimeout(() => {
-      callSignedApi()
-    }, 5_000)
+    // setTimeout(() => {
+    //   callSignedApi()
+    // }, 5_000)
   }, [])
 
   useEffect(() => {

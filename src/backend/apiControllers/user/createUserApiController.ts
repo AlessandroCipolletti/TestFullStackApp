@@ -54,6 +54,7 @@ export async function POST(request: Request) {
       accesses: {
         create: [
           {
+            accessToken,
             duration: accessTokenExpiry,
           },
         ],

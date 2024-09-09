@@ -18,7 +18,7 @@ export const UserPasswordScalarFieldEnumSchema = z.enum(['id','password','active
 
 export const UserSessionScalarFieldEnumSchema = z.enum(['id','refreshToken','duration','disabled','createdAt','userId']);
 
-export const UserSessionAccessScalarFieldEnumSchema = z.enum(['id','duration','createdAt','userSessionId']);
+export const UserSessionAccessScalarFieldEnumSchema = z.enum(['id','accessToken','duration','createdAt','userSessionId']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -82,6 +82,7 @@ export type UserSession = z.infer<typeof UserSessionSchema>
 
 export const UserSessionAccessSchema = z.object({
   id: z.string(),
+  accessToken: z.string(),
   duration: z.string(),
   createdAt: z.coerce.date(),
   userSessionId: z.string(),

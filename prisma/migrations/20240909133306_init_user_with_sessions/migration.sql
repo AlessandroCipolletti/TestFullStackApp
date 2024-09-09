@@ -39,6 +39,7 @@ CREATE TABLE "UserSession" (
 -- CreateTable
 CREATE TABLE "UserSessionAccess" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "accessToken" TEXT NOT NULL,
     "duration" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userSessionId" UUID NOT NULL,

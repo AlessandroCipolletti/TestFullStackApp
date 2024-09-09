@@ -39,6 +39,7 @@ model User {
   sessions    UserSession[]
 }
 
+// user password history, only one active at a time
 model UserPassword {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   password  String
@@ -49,6 +50,7 @@ model UserPassword {
   userId String @db.Uuid
 }
 
+// user login sessions, one week duration
 model UserSession {
   id           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   refreshToken String
@@ -61,10 +63,12 @@ model UserSession {
   userId String @db.Uuid
 }
 
+// each session refresh (new access token generation using refreshToken), one hour duration
 model UserSessionAccess {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  duration  String
-  createdAt DateTime @default(now())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accessToken String
+  duration    String
+  createdAt   DateTime @default(now())
 
   UserSession   UserSession @relation(fields: [userSessionId], references: [id])
   userSessionId String      @db.Uuid

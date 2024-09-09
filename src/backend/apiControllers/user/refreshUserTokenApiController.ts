@@ -28,6 +28,7 @@ export async function POST(request: Request) {
         disabled: false,
         refreshToken: `${refreshToken}`,
       },
+      orderBy: { createdAt: 'desc' },
     })
 
     if (!userSession) {
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
     await prisma.userSessionAccess.create({
       data: {
         userSessionId: userSession.id,
+        accessToken,
         duration: accessTokenExpiry,
       },
     })

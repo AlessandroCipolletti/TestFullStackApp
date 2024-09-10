@@ -10,14 +10,14 @@ export async function POST(request: Request) {
     const { decodedToken } = await verifyRequestToken(request)
 
     if (!decodedToken) {
-      logger.info({ msgCode: '001-013' }, 'Veryify token attempt failed')
+      logger.info({ msgCode: '001-014' }, 'Veryify token attempt failed')
       throw new Error('No token provided')
     }
 
     const tokenUser = UserSchema.parse(decodedToken.user)
 
     logger.info(
-      { userId: tokenUser.id, email: tokenUser.email, msgCode: '001-014' },
+      { userId: tokenUser.id, email: tokenUser.email, msgCode: '001-015' },
       'User token verified'
     )
 

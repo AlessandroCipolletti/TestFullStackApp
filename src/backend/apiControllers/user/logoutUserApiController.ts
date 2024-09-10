@@ -10,7 +10,7 @@ export async function POST(request: Request) {
       await verifyRequestToken(request)
 
     if (!decodedToken || !accessToken) {
-      logger.warn({ msgCode: '001-015' }, 'Logout attempt with invalid token')
+      logger.warn({ msgCode: '001-016' }, 'Logout attempt with invalid token')
       return NextResponse.json({ message: 'Logged out' })
     }
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
     if (!userSessionAccess) {
       logger.warn(
-        { msgCode: '001-016' },
+        { msgCode: '001-017' },
         'Logout attempt but no session found in db'
       )
       return NextResponse.json({ message: 'Logged out' })
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     if (userSessionAccess.UserSession.disabled) {
       logger.warn(
-        { userId: userSessionAccess.UserSession.userId, msgCode: '001-017' },
+        { userId: userSessionAccess.UserSession.userId, msgCode: '001-018' },
         'Logout attempt for a disabled user session'
       )
       return NextResponse.json({ message: 'Logged out' })
@@ -49,9 +49,9 @@ export async function POST(request: Request) {
         email: tokenUser.email,
         userSessionAccessId: userSessionAccess.id,
         userSessionId: userSessionAccess.UserSession.id,
-        msgCode: '001-018',
+        msgCode: '001-019',
       },
-      'User logged out'
+      'Logout successful'
     )
 
     return NextResponse.json({ message: 'Logged out' })

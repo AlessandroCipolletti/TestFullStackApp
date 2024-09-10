@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
     if (!userSession) {
       logger.warn(
-        { userId: tokenUser.id, email: tokenUser.email, msgCode: '001-011' },
+        { userId: tokenUser.id, email: tokenUser.email, msgCode: '001-009' },
         'Refresh token attempt for a non found session'
       )
       throw new Error('No session found')
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
           userId: tokenUser.id,
           email: tokenUser.email,
           userSessionId: userSession.id,
-          msgCode: '001-012',
+          msgCode: '001-010',
         },
         'Refresh token attempt for disabled session'
       )
@@ -69,13 +69,13 @@ export async function POST(request: Request) {
           {
             userId: tokenUser.id,
             email: userSession.User.email,
-            msgCode: '001-009',
+            msgCode: '001-011',
           },
           'Refresh token attempt for a disabled user'
         )
       } else {
         logger.warn(
-          { userId: tokenUser.id, msgCode: '001-010' },
+          { userId: tokenUser.id, msgCode: '001-012' },
           'Refresh token attempt for a non found user'
         )
       }

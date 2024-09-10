@@ -32,7 +32,7 @@ export const createNewUserSession = async (user: User) => {
     {
       email: user.email,
       userId: user.id,
-      sessionId: userSession.id,
+      userSessionId: userSession.id,
       msgCode: '001-004',
     },
     'New user session created'

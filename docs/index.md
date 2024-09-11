@@ -13,5 +13,7 @@ I18n for translations
 ## index
 
 [App routing and Code organisation](pages/codeSplitting.md)
+
 [Prisma, db migrations, schemas and types](pages/prisma.md)
+
 [Backend logs](pages/backendLogs.md)

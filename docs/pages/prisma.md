@@ -1,4 +1,4 @@
-[< Home](index.md)
+[< Home](../index.md)
 
 # DB schemas, types,  and migrations with Prisma
 <img src="https://cdn.worldvectorlogo.com/logos/prisma-2.svg" alt="drawing" width="400" style="margin-bottom: 30px;" />

@@ -1,4 +1,4 @@
-[< Home](index.md)
+[< Home](../index.md)
 
 # App routing and Code splitting
 

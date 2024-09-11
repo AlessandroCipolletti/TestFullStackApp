@@ -1,5 +1,6 @@
 import z from 'zod'
 import { makeEndpoint } from './utils/makeEndpoint'
+import { UserSchema } from '@/backend/schemas'
 
 const LoginEndpointRequestSchema = z.object({
   email: z.string().email(),
@@ -9,6 +10,7 @@ const LoginEndpointRequestSchema = z.object({
 const LoginEndpointResponseSchema = z.object({
   accessToken: z.string(),
   refreshToken: z.string(),
+  user: UserSchema,
 })
 
 const LoginEndpoint = makeEndpoint({

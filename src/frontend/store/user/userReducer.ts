@@ -1,9 +1,13 @@
+import z from 'zod'
 import { createSlice } from '@reduxjs/toolkit'
+import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import {
   createNewUser,
   loginUser,
   verifyUserToken,
 } from '@/frontend/store/user/userActions'
+
+type User = z.infer<typeof LoginEndpoint.responseSchema>['user']
 
 export enum LoginStatus {
   IDLE = 'idle',
@@ -15,25 +19,12 @@ export enum LoginStatus {
 
 export type UserState = {
   loginStatus: LoginStatus
-  id: string | null
-  email: string | null
-  firstName: string | null
-  lastName: string | null
+  user: User | null
 }
 
 const initialState: UserState = {
   loginStatus: LoginStatus.IDLE,
-  id: null,
-  email: null,
-  firstName: null,
-  lastName: null,
-}
-
-const setUser = (state: UserState, user: Omit<UserState, 'loginStatus'>) => {
-  state.id = user.id
-  state.email = user.email
-  state.firstName = user.firstName
-  state.lastName = user.lastName
+  user: null,
 }
 
 const userReducer = createSlice({
@@ -45,7 +36,7 @@ const userReducer = createSlice({
       // CREATE USER
       .addCase(createNewUser.fulfilled, (state, action) => {
         state.loginStatus = LoginStatus.LOGGED
-        setUser(state, action.payload)
+        state.user = action.payload.user
       })
       .addCase(createNewUser.rejected, (state, action) => {
         // TODO
@@ -54,30 +45,30 @@ const userReducer = createSlice({
       // VERIFY USER TOKEN
       .addCase(verifyUserToken.pending, (state, action) => {
         state.loginStatus = LoginStatus.LOADING
-        setUser(state, initialState)
+        state.user = null
       })
       .addCase(verifyUserToken.rejected, (state, action) => {
         state.loginStatus = LoginStatus.EXPIRED
-        setUser(state, initialState)
+        state.user = null
       })
       .addCase(verifyUserToken.fulfilled, (state, action) => {
         if (action.payload.valid && action.payload.user) {
           state.loginStatus = LoginStatus.LOGGED
-          setUser(state, action.payload.user)
+          state.user = action.payload.user
         } else {
           state.loginStatus = LoginStatus.EXPIRED
-          setUser(state, initialState)
+          state.user = null
         }
       })
 
       // LOGIN USER
       .addCase(loginUser.pending, (state) => {
         state.loginStatus = LoginStatus.LOADING
-        setUser(state, initialState)
+        state.user = null
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loginStatus = LoginStatus.LOGGED
-        setUser(state, action.payload)
+        state.user = action.payload.user
       })
       .addCase(loginUser.rejected, (state) => {
         state.loginStatus = LoginStatus.FAILED

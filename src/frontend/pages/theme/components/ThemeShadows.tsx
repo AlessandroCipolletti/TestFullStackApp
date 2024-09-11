@@ -3,7 +3,7 @@ import theme from '@/frontend/theme'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import getObjectKeys from '@/utils/getObjectKeys'
+import { getObjectKeys } from '@/utils/typescriptUtils'
 
 export default function ThemeShadows() {
   const renderShadow = useCallback(

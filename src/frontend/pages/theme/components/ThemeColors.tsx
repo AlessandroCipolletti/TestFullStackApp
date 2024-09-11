@@ -3,11 +3,12 @@ import * as Colors from '@mui/material/colors'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import getObjectKeys from '@/utils/getObjectKeys'
+import { getObjectKeys } from '@/utils/typescriptUtils'
 
 export default function ThemeColors() {
   const renderColor = useCallback((color: keyof typeof Colors) => {
     const colorShades = Colors[color]
+
     if (typeof colorShades !== 'object') {
       return null
     }

@@ -48,6 +48,7 @@ export async function POST(request: Request) {
   const response: z.infer<typeof CreateUserEndpoint.responseSchema> = {
     accessToken,
     refreshToken,
+    user: newUser,
   }
 
   return NextResponse.json(response, { status: 201 })

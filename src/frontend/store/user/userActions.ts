@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { User } from '@prisma/client'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import LoginEndpoint from '@/endpoints/LoginEndpoint'
 import CreateUserEndpoint from '@/endpoints/CreateUserEndpoint'
@@ -14,7 +13,7 @@ import {
 } from '@/frontend/utils/loginToken'
 
 export const createNewUser = createAsyncThunk<
-  User,
+  z.infer<typeof CreateUserEndpoint.responseSchema>,
   z.infer<typeof CreateUserEndpoint.requestSchema>
 >('userActions/createNewUser', async (params, thunkAPI) => {
   const [result, error] = await callEndpoint(CreateUserEndpoint, {
@@ -25,18 +24,14 @@ export const createNewUser = createAsyncThunk<
     return thunkAPI.rejectWithValue(error?.message ?? 'Create user error')
   }
 
-  const { accessToken, refreshToken } = result
+  setAccessTokenCookie(result.accessToken)
+  setRefreshTokenCookie(result.refreshToken)
 
-  setAccessTokenCookie(accessToken)
-  setRefreshTokenCookie(refreshToken)
-
-  const payload: User = JSON.parse(atob(accessToken.split('.')[1]))
-
-  return payload
+  return result
 })
 
 export const loginUser = createAsyncThunk<
-  User,
+  z.infer<typeof LoginEndpoint.responseSchema>,
   z.infer<typeof LoginEndpoint.requestSchema>
 >('userActions/loginUser', async (params, thunkAPI) => {
   const [result, error] = await callEndpoint(LoginEndpoint, {
@@ -47,14 +42,10 @@ export const loginUser = createAsyncThunk<
     return thunkAPI.rejectWithValue(error?.message ?? 'Invalid login')
   }
 
-  const { accessToken, refreshToken } = result
+  setAccessTokenCookie(result.accessToken)
+  setRefreshTokenCookie(result.refreshToken)
 
-  setAccessTokenCookie(accessToken)
-  setRefreshTokenCookie(refreshToken)
-
-  const payload: User = JSON.parse(atob(accessToken.split('.')[1]))
-
-  return payload
+  return result
 })
 
 export const verifyUserToken = createAsyncThunk<

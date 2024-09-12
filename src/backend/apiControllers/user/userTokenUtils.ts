@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server'
 import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { User } from '@prisma/client'
 
@@ -22,8 +23,8 @@ export const createUserRefreshToken = async (user: User) => {
   return token
 }
 
-export const verifyRequestToken = async (
-  request: Request
+export const verifyApiRequestToken = async (
+  request: NextRequest
 ): Promise<{ decodedToken: JWTPayload | false; token: string }> => {
   try {
     const authHeader =
@@ -50,6 +51,28 @@ export const verifyRequestToken = async (
     return { decodedToken: payload, token }
   } catch (e) {
     return { decodedToken: false, token: '' }
+  }
+}
+
+export const verifyPageRequestToken = async (request: NextRequest) => {
+  try {
+    const token = request.cookies.get('refresh_token')
+    if (!token) {
+      return false
+    }
+
+    const { payload } = await jwtVerify(
+      token.value,
+      new TextEncoder().encode(process.env.JWT_SECRET!)
+    )
+
+    if (typeof payload !== 'object') {
+      return false
+    }
+
+    return payload
+  } catch (e) {
+    return false
   }
 }
 

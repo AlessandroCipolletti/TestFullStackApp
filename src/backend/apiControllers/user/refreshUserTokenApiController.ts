@@ -1,19 +1,19 @@
 import { z } from 'zod'
 import prisma from 'prisma/init'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import RefreshUserTokenEndpoint from '@/endpoints/RefreshUserTokenEndpoint'
 import { UserSchema } from '@/backend/schemas'
 import logger from '@/backend/utils/logger'
 import {
   createUserAccessToken,
-  verifyRequestToken,
+  verifyApiRequestToken,
   accessTokenExpiry,
 } from './userTokenUtils'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const { decodedToken, token: refreshToken } =
-      await verifyRequestToken(request)
+      await verifyApiRequestToken(request)
 
     if (!decodedToken) {
       if (refreshToken) {

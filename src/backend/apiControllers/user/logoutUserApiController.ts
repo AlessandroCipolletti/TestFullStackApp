@@ -1,13 +1,13 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import prisma from 'prisma/init'
 import logger from '@/backend/utils/logger'
 import { UserSchema } from '@/backend/schemas'
-import { verifyRequestToken } from './userTokenUtils'
+import { verifyApiRequestToken } from './userTokenUtils'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const { decodedToken, token: accessToken } =
-      await verifyRequestToken(request)
+      await verifyApiRequestToken(request)
 
     if (!decodedToken || !accessToken) {
       logger.warn({ msgCode: '001-016' }, 'Logout attempt with invalid token')

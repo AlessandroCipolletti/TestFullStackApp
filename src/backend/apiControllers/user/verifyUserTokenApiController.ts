@@ -1,13 +1,13 @@
 import { z } from 'zod'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import VerifyUserTokenEndpoint from '@/endpoints/VerifyUserTokenEndpoint'
 import { UserSchema } from '@/backend/schemas'
 import logger from '@/backend/utils/logger'
-import { verifyRequestToken } from './userTokenUtils'
+import { verifyApiRequestToken } from './userTokenUtils'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const { decodedToken } = await verifyRequestToken(request)
+    const { decodedToken } = await verifyApiRequestToken(request)
 
     if (!decodedToken) {
       logger.info({ msgCode: '001-014' }, 'Veryify token attempt failed')

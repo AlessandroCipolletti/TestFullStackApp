@@ -9,11 +9,16 @@ type HoverlayMenuButtonProps = {
   items: HoverlayMenuItem[]
 }
 
-export type HoverlayMenuItem = {
-  label: string
-  onClick: () => void
-  preventCloseOnClick?: boolean
-}
+export type HoverlayMenuItem =
+  | {
+      label: string
+      onClick: () => void
+      preventCloseOnClick?: boolean
+    }
+  | {
+      label: string
+      href: string
+    }
 
 export default function HoverlayMenuButton({
   Icon,
@@ -38,19 +43,30 @@ export default function HoverlayMenuButton({
         <IconComponent />
       </IconButton>
       <Menu anchorEl={anchorEl} open={openUserMenu} onClose={handleClose}>
-        {items.map((item, index) => (
-          <MenuItem
-            key={`${item.label}-${index}`}
-            onClick={() => {
-              item.onClick()
-              if (!item.preventCloseOnClick) {
-                handleClose()
-              }
-            }}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
+        {items.map((item, index) =>
+          'href' in item ? (
+            <MenuItem
+              key={`${item.label}-${index}`}
+              component="a"
+              href={item.href}
+              onClick={handleClose}
+            >
+              {item.label}
+            </MenuItem>
+          ) : (
+            <MenuItem
+              key={`${item.label}-${index}`}
+              onClick={() => {
+                item.onClick()
+                if (!item.preventCloseOnClick) {
+                  handleClose()
+                }
+              }}
+            >
+              {item.label}
+            </MenuItem>
+          )
+        )}
       </Menu>
     </>
   )

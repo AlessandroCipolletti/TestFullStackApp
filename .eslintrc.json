@@ -23,6 +23,7 @@
     "prettier/prettier": [
       "error"
     ],
+    "@next/next/no-img-element": "off",
     "no-unused-vars": "off",
     "import/no-unresolved": "error",
     "import/named": "error",

@@ -14,8 +14,8 @@ const menuItems: MenuItem[] = [
     href: '/dashboard/data',
     icon: <DataIcon />,
     children: [
-      { text: 'Sottodati 1', href: '/dashboard/data/subdata1' },
-      { text: 'Sottodati 2', href: '/dashboard/data/subdata2' },
+      { text: 'Data page', href: '/dashboard/data' },
+      { text: 'Subpage', href: '/dashboard/data/subpage' },
     ],
   },
   {
@@ -23,9 +23,13 @@ const menuItems: MenuItem[] = [
     href: '/dashboard/charts',
     icon: <ChartIcon />,
     children: [
-      { text: 'Sottografici 1', href: '/dashboard/charts/subchart1' },
-      { text: 'Sottografici 2', href: '/dashboard/charts/subchart2' },
+      { text: 'Charts page', href: '/dashboard/charts' },
+      { text: 'Subpage', href: '/dashboard/charts/subpage' },
     ],
+  },
+  {
+    text: 'Dashboard',
+    href: '/dashboard',
   },
 ]
 

@@ -4,8 +4,6 @@ import useTheme from '@mui/material/styles/useTheme'
 import Toolbar from '@mui/material/Toolbar'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-const drawerWidth = 240
-
 type PageLayoutContentProps = {
   sidebarOpen: boolean
   children: ReactNode
@@ -28,7 +26,9 @@ export default function PageLayoutContent({
           duration: theme.transitions.duration.leavingScreen,
         }),
         width:
-          sidebarOpen && !isMobile ? `calc(100vw - ${drawerWidth}px)` : '100%',
+          sidebarOpen && !isMobile
+            ? `calc(100vw - ${theme.sizes.drawerWidth}px)`
+            : '100%',
       }}
     >
       <Toolbar />

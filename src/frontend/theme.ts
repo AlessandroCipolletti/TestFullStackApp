@@ -2,6 +2,19 @@
 import { Roboto } from 'next/font/google'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
+declare module '@mui/material/styles' {
+  interface Theme {
+    sizes: {
+      drawerWidth: number
+    }
+  }
+  interface ThemeOptions {
+    sizes?: {
+      drawerWidth?: number
+    }
+  }
+}
+
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
@@ -17,6 +30,9 @@ const theme = responsiveFontSizes(
   createTheme({
     colorSchemes: {
       dark: prefersDarkMode,
+    },
+    sizes: {
+      drawerWidth: 240,
     },
     // palette: {
     //   mode: 'light',

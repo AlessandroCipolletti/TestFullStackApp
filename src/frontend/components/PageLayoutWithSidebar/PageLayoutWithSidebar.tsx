@@ -22,12 +22,12 @@ export default function PageLayoutWithSidebar({
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
 
   const toggleSidebar = () => {
-    setSidebarOpen(!open)
+    setSidebarOpen(!sidebarOpen)
   }
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <PageLayoutHeader pageTitle="Dashboard">
+      <PageLayoutHeader pageTitle="Dashboard" toggleMenuOpen={toggleSidebar}>
         <UserMenuButton />
       </PageLayoutHeader>
 

@@ -6,21 +6,41 @@ import DynamicGrid from '@/frontend/components/DynamicGrid'
 import PageWrapper from '@/frontend/components/PageWrapper'
 
 export default function DashboardPage() {
+  const urls = [
+    'https://www.nationalgeographic.it/upload/ngi-hero/cover-1685960847724-Hero_100.jpg',
+    'https://cms.imgworlds.com/assets/e3873302-212a-4c3a-aab3-c3bee866903c.jpg',
+    'https://world-schools.com/fr/wp-content/uploads/sites/13/2023/05/IMG-Academy-cover-WS.webp',
+    'https://www.ideawebtv.it/wp-content/uploads/2023/06/OASIS-PHOTOCONTEST2.jpg',
+    'https://img.freepik.com/photos-premium/belle-illustration-coeur-paysage-ai-generative_791316-7419.jpg',
+    'https://www.keblog.it/wp-content/uploads/2019/12/le-piu-belle-foto-del-2019-15.jpg',
+    'https://i0.wp.com/fotografinviaggio.it/wp-content/uploads/2023/04/Immagine-copertina-per-blog-2-21.jpg',
+    'https://www.nationalgeographic.it/upload/ngi-hero/cover-1685960847724-Hero_100.jpg',
+    'https://cms.imgworlds.com/assets/e3873302-212a-4c3a-aab3-c3bee866903c.jpg',
+    'https://world-schools.com/fr/wp-content/uploads/sites/13/2023/05/IMG-Academy-cover-WS.webp',
+    'https://www.ideawebtv.it/wp-content/uploads/2023/06/OASIS-PHOTOCONTEST2.jpg',
+    'https://img.freepik.com/photos-premium/belle-illustration-coeur-paysage-ai-generative_791316-7419.jpg',
+    'https://www.keblog.it/wp-content/uploads/2019/12/le-piu-belle-foto-del-2019-15.jpg',
+    'https://i0.wp.com/fotografinviaggio.it/wp-content/uploads/2023/04/Immagine-copertina-per-blog-2-21.jpg',
+  ]
   const gridConfig = {
     columnGap: 10,
     rowGap: 10,
     templateRows: [
       {
-        height: 300,
-        areas: [1, 2, 2],
+        height: 200,
+        areas: [0, 1, 1, 2],
       },
       {
-        height: 300,
-        areas: [3, 4, 5],
+        height: 200,
+        areas: [3, 1, 1, 4],
       },
       {
-        height: 300,
-        areas: [6, 6, 7],
+        height: 200,
+        areas: [3, 5, 5, 4],
+      },
+      {
+        height: 200,
+        areas: [6, 6, 7, 8],
       },
     ],
   }
@@ -35,63 +55,26 @@ export default function DashboardPage() {
       </Typography>
       <PageWrapper>
         <DynamicGrid config={gridConfig}>
-          <Element index={1}>
-            <img
-              src="https://cms.imgworlds.com/assets/e3873302-212a-4c3a-aab3-c3bee866903c.jpg"
-              alt=""
-            />
-          </Element>
-          <Element index={2}>
-            <img
-              src="https://world-schools.com/fr/wp-content/uploads/sites/13/2023/05/IMG-Academy-cover-WS.webp"
-              alt=""
-            />
-          </Element>
-          <Element index={3}>
-            <img
-              src="https://www.ideawebtv.it/wp-content/uploads/2023/06/OASIS-PHOTOCONTEST2.jpg"
-              alt=""
-            />
-          </Element>
-          <Element index={4}>
-            <img
-              src="https://img.freepik.com/photos-premium/belle-illustration-coeur-paysage-ai-generative_791316-7419.jpg"
-              alt=""
-            />
-          </Element>
-          <Element index={5}>
-            <img
-              src="https://www.keblog.it/wp-content/uploads/2019/12/le-piu-belle-foto-del-2019-15.jpg"
-              alt=""
-            />
-          </Element>
-          <Element index={6}>
-            <img
-              src="https://i0.wp.com/fotografinviaggio.it/wp-content/uploads/2023/04/Immagine-copertina-per-blog-2-21.jpg"
-              alt=""
-            />
-          </Element>
-          <Element index={7}>
-            <img
-              src="https://www.nationalgeographic.it/upload/ngi-hero/cover-1685960847724-Hero_100.jpg"
-              alt=""
-            />
-          </Element>
+          {urls.map((url, index) => (
+            <Element key={index} index={index}>
+              <img src={url} alt="" />
+            </Element>
+          ))}
         </DynamicGrid>
       </PageWrapper>
     </div>
   )
 }
 
-const Element = styled('div')<{ index: number }>(({ index }) => ({
-  position: 'relative',
-  gridArea: `A${index}`,
-  borderRadius: 10,
-  overflow: 'hidden',
+const Element = styled('div')<{ index: number }>`
+  position: relative;
+  grid-area: ${({ index }) => `A${index}`};
+  border-radius: 10px;
+  overflow: hidden;
 
-  '& img': {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-}))
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`

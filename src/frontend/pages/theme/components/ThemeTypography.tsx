@@ -13,6 +13,9 @@ const TYPOGRAPHY_VARIANTS = [
   'subtitle2',
   'body1',
   'body2',
+  'caption',
+  'button',
+  'overline',
   'inherit',
 ] as const
 

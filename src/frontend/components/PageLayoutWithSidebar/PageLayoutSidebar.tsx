@@ -67,7 +67,7 @@ export default function PageLayoutSidebar({
     isLast: boolean
   ) => (
     <Box key={menuGroup.groupName} sx={{ pt: 0.5 }}>
-      <Typography variant="caption" sx={{ pl: 2 * level }}>
+      <Typography variant="subtitle2" sx={{ pl: 2 * level }}>
         {menuGroup.groupName}
       </Typography>
       {menuGroup.items.map((item, i) =>

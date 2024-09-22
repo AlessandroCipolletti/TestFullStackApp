@@ -102,6 +102,10 @@ const menuItems: MenuItem[] = [
         label: 'Dashboard',
         href: '/dashboard',
       },
+      {
+        label: 'Theme',
+        href: '/theme',
+      },
     ],
   },
 ]

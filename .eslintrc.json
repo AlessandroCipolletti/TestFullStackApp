@@ -23,6 +23,8 @@
     "prettier/prettier": [
       "error"
     ],
+    "react/jsx-key": "error",
+    "react/no-array-index-key": "error",
     "@next/next/no-img-element": "off",
     "no-unused-vars": "off",
     "import/no-unresolved": "error",

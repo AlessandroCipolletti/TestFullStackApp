@@ -55,8 +55,8 @@ export default function DashboardPage() {
       </Typography>
       <PageWrapper>
         <DynamicGrid config={gridConfig}>
-          {urls.map((url, index) => (
-            <Element key={index} index={index}>
+          {urls.map((url) => (
+            <Element key={url}>
               <img src={url} alt="" />
             </Element>
           ))}
@@ -66,9 +66,8 @@ export default function DashboardPage() {
   )
 }
 
-const Element = styled('div')<{ index: number }>`
+const Element = styled('div')`
   position: relative;
-  grid-area: ${({ index }) => `A${index}`};
   border-radius: 10px;
   overflow: hidden;
 

@@ -1,11 +1,13 @@
 import React, {
-  FC,
   PropsWithChildren,
-  Children,
   RefObject,
   CSSProperties,
+  useMemo,
+  forwardRef,
+  isValidElement,
+  Children,
+  HTMLAttributes,
 } from 'react'
-// import styled from 'styled-components';
 import { styled } from '@mui/material/styles'
 
 export type DynamicGridConfig = {
@@ -24,46 +26,64 @@ interface DynamicGridProps {
   className?: string
 }
 
-const DynamicGrid: FC<PropsWithChildren<DynamicGridProps>> = ({
-  refProp,
-  config,
-  style,
-  className,
-  children,
-}) => {
+const DynamicGrid = forwardRef<
+  HTMLDivElement,
+  PropsWithChildren<DynamicGridProps>
+>(({ config, style, className, children }, ref) => {
+  const childrenCount = Children.count(children)
+
+  const gridTemplateRows = useMemo(
+    () => formatGridTemplateRows(config, childrenCount),
+    [config, childrenCount]
+  )
+
+  const gridTemplateColumns = useMemo(
+    () => formatGridTemplateColumns(config),
+    [config]
+  )
+
   return (
     <Grid
-      ref={refProp}
-      config={config}
+      ref={ref}
       style={style}
       className={className}
-      childrenCount={Children.toArray(children).length}
+      columnGap={config.columnGap}
+      rowGap={config.rowGap}
+      gridTemplateRows={gridTemplateRows}
+      gridTemplateColumns={gridTemplateColumns}
     >
-      {children}
+      {Children.map(
+        children,
+        (child, index) =>
+          isValidElement<HTMLAttributes<HTMLElement>>(child) && (
+            <child.type
+              {...child.props}
+              style={{ ...(child.props.style || {}), gridArea: `A${index}` }}
+            />
+          )
+      )}
     </Grid>
   )
-}
+})
+DynamicGrid.displayName = 'DynamicGrid'
 
 export default DynamicGrid
 
-// const Grid = styled.div<{ config: DynamicGridConfig; childrenCount: number }>`
-//   display: grid;
-//   column-gap: ${({ config }) => config.columnGap || 0}px;
-//   row-gap: ${({ config }) => config.rowGap || 0}px;
-//   grid-template: ${({ config, childrenCount }) =>
-//       formatGridTemplateRows(config, childrenCount)} / ${({ config }) =>
-//       formatGridTemplateColumns(config)};
-// `;
+interface GridProps {
+  columnGap?: number
+  rowGap?: number
+  gridTemplateRows: string
+  gridTemplateColumns: string
+}
 
-const Grid = styled('div')<{
-  config: DynamicGridConfig
-  childrenCount: number
-}>(({ config, childrenCount }) => ({
-  display: 'grid',
-  columnGap: `${config.columnGap || 0}px`,
-  rowGap: `${config.rowGap || 0}px`,
-  gridTemplate: `${formatGridTemplateRows(config, childrenCount)} / ${formatGridTemplateColumns(config)}`,
-}))
+const Grid = styled('div')<GridProps>`
+  ${({ columnGap = 0, rowGap = 0, gridTemplateRows, gridTemplateColumns }) => `
+    display: grid;
+    column-gap: ${columnGap}px;
+    row-gap: ${rowGap}px;
+    grid-template: ${gridTemplateRows} / ${gridTemplateColumns}; 
+  `}
+`
 
 const formatGridTemplateRows = (
   config: DynamicGridConfig,

@@ -10,26 +10,99 @@ import LoginWrapper from './components/LoginWrapper'
 
 const menuItems: MenuItem[] = [
   {
-    text: 'Dati',
-    href: '/dashboard/data',
-    icon: <DataIcon />,
-    children: [
-      { text: 'Data page', href: '/dashboard/data' },
-      { text: 'Subpage', href: '/dashboard/data/subpage' },
+    groupName: 'Pagine principali',
+    items: [
+      {
+        label: 'Dati',
+        icon: <DataIcon />,
+        children: [
+          { label: 'Data page', href: '/dashboard/data' },
+          { label: 'Subpage', href: '/dashboard/data/subpage' },
+        ],
+      },
+      {
+        label: 'Grafici',
+        icon: <ChartIcon />,
+        children: [
+          {
+            label: 'Charts page',
+            href: '/dashboard/charts',
+            icon: <ChartIcon />,
+          },
+          {
+            label: 'Subpage',
+            href: '/dashboard/charts/subpage',
+          },
+        ],
+      },
     ],
   },
   {
-    text: 'Grafici',
-    href: '/dashboard/charts',
-    icon: <ChartIcon />,
-    children: [
-      { text: 'Charts page', href: '/dashboard/charts' },
-      { text: 'Subpage', href: '/dashboard/charts/subpage' },
+    groupName: 'Paaaagine',
+    items: [
+      {
+        label: 'Dati 2',
+        icon: <DataIcon />,
+        children: [
+          { label: 'Data page 2', href: '/dashboard/data' },
+          { label: 'Subpage 2', href: '/dashboard/data/subpage' },
+        ],
+      },
+      {
+        label: 'Grafici 2',
+        icon: <ChartIcon />,
+        children: [
+          {
+            label: 'Charts page 2',
+            href: '/dashboard/charts',
+            icon: <ChartIcon />,
+          },
+          {
+            groupName: 'Continua Paaaagine',
+            items: [
+              {
+                label: 'Paginetta',
+                href: '/dashboard',
+              },
+              {
+                label: 'Paginaccia',
+                href: '/dashboard',
+              },
+              {
+                label: 'Paginona',
+                href: '/dashboard',
+              },
+            ],
+          },
+          {
+            groupName: 'Continua Paaaagine 2',
+            items: [
+              {
+                label: 'Paginetta 3',
+                href: '/dashboard',
+              },
+              {
+                label: 'Paginaccia 3',
+                href: '/dashboard',
+              },
+              {
+                label: 'Paginona 3',
+                href: '/dashboard',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
-    text: 'Dashboard',
-    href: '/dashboard',
+    groupName: 'Altre pagine',
+    items: [
+      {
+        label: 'Dashboard',
+        href: '/dashboard',
+      },
+    ],
   },
 ]
 

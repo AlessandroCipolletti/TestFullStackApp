@@ -32,7 +32,7 @@ const theme = responsiveFontSizes(
       dark: prefersDarkMode,
     },
     sizes: {
-      drawerWidth: 240,
+      drawerWidth: 260,
     },
     // palette: {
     //   mode: 'light',

@@ -48,7 +48,7 @@ export default function DashboardPage() {
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Benvenuto nel Dashboard
+        Benvenuto nella Dashboard
       </Typography>
       <Typography>
         Seleziona un&apos;opzione dal menu a sinistra per iniziare.
@@ -56,7 +56,7 @@ export default function DashboardPage() {
       <PageWrapper>
         <DynamicGrid config={gridConfig}>
           {urls.map((url) => (
-            <Element key={url}>
+            <Element key={`${url}-${Math.random()}`}>
               <img src={url} alt="" />
             </Element>
           ))}

@@ -14,6 +14,24 @@ export type AppDispatch = typeof store.dispatch
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        isSerializable: (value: unknown) => {
+          if (value instanceof Date) return true
+          return typeof value === 'object' && value !== null
+            ? !(
+                typeof value === 'function' ||
+                value instanceof Map ||
+                value instanceof Set ||
+                value instanceof RegExp ||
+                value instanceof WeakMap ||
+                value instanceof WeakSet
+              )
+            : true
+        },
+      },
+    }),
 })
 
 export default store

@@ -9,36 +9,43 @@ import {
 } from '@/frontend/utils/loginToken'
 import RefreshUserTokenEndpoint from '@/endpoints/RefreshUserTokenEndpoint'
 
+type CallEndpointHeaders = Partial<Record<string, string>>
+
+export type CallEndpointParams<
+  QueryParams extends z.ZodType,
+  RequestSchema extends z.ZodType,
+> = (QueryParams extends z.ZodVoid
+  ? RequestSchema extends z.ZodVoid
+    ?
+        | {
+            headers?: CallEndpointHeaders
+          }
+        | undefined
+    : {
+        body: z.infer<RequestSchema>
+        headers?: CallEndpointHeaders
+      }
+  : RequestSchema extends z.ZodVoid
+    ? {
+        query: z.infer<QueryParams>
+        headers?: CallEndpointHeaders
+      }
+    : {
+        query: z.infer<QueryParams>
+        body: z.infer<RequestSchema>
+        headers?: CallEndpointHeaders
+      }) & {
+  token?: string
+  canRetryWithRefreshToken?: boolean
+}
+
 export const callEndpoint = async <
   QueryParams extends z.ZodType,
   RequestSchema extends z.ZodType,
   ResponseSchema extends z.ZodType,
 >(
   endpoint: Endpoint<QueryParams, RequestSchema, ResponseSchema>,
-  params: (QueryParams extends z.ZodVoid
-    ? RequestSchema extends z.ZodVoid
-      ?
-          | {
-              headers?: Record<string, string>
-            }
-          | undefined
-      : {
-          body: z.infer<RequestSchema>
-          headers?: Record<string, string>
-        }
-    : RequestSchema extends z.ZodVoid
-      ? {
-          query: z.infer<QueryParams>
-          headers?: Record<string, string>
-        }
-      : {
-          query: z.infer<QueryParams>
-          body: z.infer<RequestSchema>
-          headers?: Record<string, string>
-        }) & {
-    token?: string
-    canRetryWithRefreshToken?: boolean
-  }
+  params: CallEndpointParams<QueryParams, RequestSchema>
 ): Promise<[z.infer<ResponseSchema> | false, Error | undefined]> => {
   const query = params && 'query' in params ? params.query : undefined
   const body = params && 'body' in params ? params.body : undefined

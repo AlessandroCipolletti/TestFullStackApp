@@ -46,7 +46,7 @@ export default function HoverlayMenuButton({
         {items.map((item, index) =>
           'href' in item ? (
             <MenuItem
-              key={`${item.label}-${index}`}
+              key={item.label}
               component="a"
               href={item.href}
               onClick={handleClose}
@@ -55,7 +55,7 @@ export default function HoverlayMenuButton({
             </MenuItem>
           ) : (
             <MenuItem
-              key={`${item.label}-${index}`}
+              key={item.label}
               onClick={() => {
                 item.onClick()
                 if (!item.preventCloseOnClick) {

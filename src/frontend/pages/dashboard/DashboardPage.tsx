@@ -8,9 +8,8 @@ import PageWrapper from '@/frontend/components/PageWrapper'
 export default function DashboardPage() {
   const urls = [
     'https://www.nationalgeographic.it/upload/ngi-hero/cover-1685960847724-Hero_100.jpg',
-    'https://cms.imgworlds.com/assets/e3873302-212a-4c3a-aab3-c3bee866903c.jpg',
-    'https://world-schools.com/fr/wp-content/uploads/sites/13/2023/05/IMG-Academy-cover-WS.webp',
     'https://www.ideawebtv.it/wp-content/uploads/2023/06/OASIS-PHOTOCONTEST2.jpg',
+    'https://world-schools.com/fr/wp-content/uploads/sites/13/2023/05/IMG-Academy-cover-WS.webp',
     'https://img.freepik.com/photos-premium/belle-illustration-coeur-paysage-ai-generative_791316-7419.jpg',
     'https://www.keblog.it/wp-content/uploads/2019/12/le-piu-belle-foto-del-2019-15.jpg',
     'https://i0.wp.com/fotografinviaggio.it/wp-content/uploads/2023/04/Immagine-copertina-per-blog-2-21.jpg',

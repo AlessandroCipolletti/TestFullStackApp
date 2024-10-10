@@ -22,6 +22,7 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/material-nextjs": "latest",
+    "@mui/x-charts-pro": "^7.0.0-beta.2",
     "@mui/x-data-grid-premium": "^7.17.0",
     "@prisma/client": "^5.19.0",
     "@reduxjs/toolkit": "^2.2.7",

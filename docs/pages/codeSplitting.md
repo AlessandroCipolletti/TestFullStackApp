@@ -4,7 +4,7 @@
 
 Usually with the NextJs app routing, ll your code is organized inside the `app` folder.
 
-That's great to handle apis and pages routing, but the downside is that all your cose is inside files with the same name (`route.ts` for apis, and `page.tsx` fro frontend pages).
+That's great to handle apis and pages routing, but the downside is that all your code is inside files with the same name (`route.ts` for apis, and `page.tsx` fro frontend pages).
 
 I'm really used to navigate my code remembering file names, so I decided to split the code in different folders.
 
@@ -53,15 +53,15 @@ export * from '@/frontend/pages/myDashboardPage'
 const MyEndpoint = makeEndpoint({
   url: (queryParams) => `/api/myApiUrl/${queryParams.myKey}`,
   method: 'POST',
-  queryParamsSchema: z.object({ ... }),
+  queryParamsSchema: z.object({ myKey: z.string() }),
   requestSchema: z.object({ ... }),
   responseSchema: z.object({ ... }),
 })
 
 // somewhere in the frontend
 const [result, error] = await callEndpoint(MyEndpoint, {
-  query: { ... }, // endpoint.queryParamsSchema
-  body: { ... }, // endpoint.requestSchema
+  query: { myKey: 'abc' }, // typed as endpoint.queryParamsSchema
+  body: { ... }, // typed as endpoint.requestSchema
   headers?: { ... },
 })
 // result is typed as z.infer<typeof MyEndpoint.responseSchema> | false

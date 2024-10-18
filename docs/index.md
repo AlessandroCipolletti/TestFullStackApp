@@ -1,24 +1,17 @@
 # Test fullstack app
 
-NextJs 14 using app routing
+Tech Stack:
 
-Typescript
+- React 18 / NextJs 14 using app routing
+- Typescript
+- Docker
+- PostgreSQL
+- MUI 6
+- Prisma for db schemas, types, and migrations
+- Zod for schemas validation
+- Redux-toolkit for frontend data management
 
-MUI 6
-
-Prisma for db schemas, types, and migrations
-
-PostgreSQL
-
-Zod for validation
-
-Redux-toolkit for frontend data management
-
-I18n for translations
-
-
-
-## index
+## Doc index
 
 [App routing and Code organisation](pages/codeSplitting.md)
 

@@ -1,8 +1,8 @@
 # Test fullstack app
 
-## How to use
+## How to use:
 
-1. Clone this repo
+1. Clone this repo locally
 2. Duplicate the file `.env.example` and rename it to `.env` (you can change the values if you want, but not necessary)
 3. Run `npm install` to install the dependencies
 4. Install [Docker](https://www.docker.com/) 

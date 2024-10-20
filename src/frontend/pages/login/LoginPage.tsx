@@ -107,6 +107,7 @@ export default function LoginPage() {
         color="primary"
         fullWidth
         onClick={goToSignup}
+        biggerMargin
       >
         Or create an account
       </ButtonWithMargin>
@@ -123,8 +124,8 @@ const PageWrapper = styled(Container)`
   height: 100vh;
 `
 
-const ButtonWithMargin = styled(Button)`
-  margin-top: 16px;
+const ButtonWithMargin = styled(Button)<{ biggerMargin?: boolean }>`
+  margin-top: ${({ biggerMargin }) => (biggerMargin ? '48px' : '16px')};
 `
 
 const ErrorMessage = styled(Typography)`

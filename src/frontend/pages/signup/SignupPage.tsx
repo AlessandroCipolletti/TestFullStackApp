@@ -143,7 +143,12 @@ export default function LoginPage() {
       >
         Signup
       </ButtonWithMargin>
-      <ButtonWithMargin variant="contained" fullWidth onClick={goToLogin}>
+      <ButtonWithMargin
+        variant="contained"
+        fullWidth
+        onClick={goToLogin}
+        biggerMargin
+      >
         Or Login
       </ButtonWithMargin>
       {hasFailed && <ErrorMessage color="error">Error message</ErrorMessage>}
@@ -159,8 +164,8 @@ const PageWrapper = styled(Container)`
   height: 100vh;
 `
 
-const ButtonWithMargin = styled(Button)`
-  margin-top: 16px;
+const ButtonWithMargin = styled(Button)<{ biggerMargin?: boolean }>`
+  margin-top: ${({ biggerMargin }) => (biggerMargin ? '48px' : '16px')};
 `
 
 const ErrorMessage = styled(Typography)`

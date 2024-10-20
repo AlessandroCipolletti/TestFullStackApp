@@ -15,11 +15,11 @@ export default function UserMenuButton() {
     if (userIsLogged) {
       return [
         {
-          label: 'Profilo',
-          onClick: () => console.log('Profilo'),
+          label: 'Profile',
+          onClick: () => alert('Go to profile page'),
         },
         {
-          label: 'Esci',
+          label: 'Logout',
           href: '/logout',
         },
       ]

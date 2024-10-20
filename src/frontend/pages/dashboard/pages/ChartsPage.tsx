@@ -16,7 +16,7 @@ export default function ChartsPage() {
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Grafici
+        Graph
       </Typography>
       <div style={{ height: 500 }}>
         <LineChart

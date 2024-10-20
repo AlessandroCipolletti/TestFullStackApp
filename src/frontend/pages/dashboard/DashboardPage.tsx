@@ -47,10 +47,10 @@ export default function DashboardPage() {
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Benvenuto nella Dashboard
+        Welcome to the dashboard!
       </Typography>
       <Typography>
-        Seleziona un&apos;opzione dal menu a sinistra per iniziare.
+        This is a simple example of a dashboard page with a dynamic grid.
       </Typography>
       <PageWrapper>
         <DynamicGrid config={gridConfig}>

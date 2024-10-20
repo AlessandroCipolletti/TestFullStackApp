@@ -10,18 +10,17 @@ import LoginWrapper from './components/LoginWrapper'
 
 const menuItems: MenuItem[] = [
   {
-    groupName: 'Pagine principali',
+    groupName: 'Page group',
     items: [
       {
-        label: 'Dati',
+        label: 'Data folder',
         icon: <DataIcon />,
         children: [
-          { label: 'Data page', href: '/dashboard/data' },
-          { label: 'Subpage', href: '/dashboard/data/subpage' },
+          { label: 'Data page', href: '/dashboard/data', icon: <DataIcon /> },
         ],
       },
       {
-        label: 'Grafici',
+        label: 'Charts folder',
         icon: <ChartIcon />,
         children: [
           {
@@ -29,74 +28,12 @@ const menuItems: MenuItem[] = [
             href: '/dashboard/charts',
             icon: <ChartIcon />,
           },
-          {
-            label: 'Subpage',
-            href: '/dashboard/charts/subpage',
-          },
         ],
       },
     ],
   },
   {
-    groupName: 'Paaaagine',
-    items: [
-      {
-        label: 'Dati 2',
-        icon: <DataIcon />,
-        children: [
-          { label: 'Data page 2', href: '/dashboard/data' },
-          { label: 'Subpage 2', href: '/dashboard/data/subpage' },
-        ],
-      },
-      {
-        label: 'Grafici 2',
-        icon: <ChartIcon />,
-        children: [
-          {
-            label: 'Charts page 2',
-            href: '/dashboard/charts',
-            icon: <ChartIcon />,
-          },
-          {
-            groupName: 'Continua Paaaagine',
-            items: [
-              {
-                label: 'Paginetta',
-                href: '/dashboard',
-              },
-              {
-                label: 'Paginaccia',
-                href: '/dashboard',
-              },
-              {
-                label: 'Paginona',
-                href: '/dashboard',
-              },
-            ],
-          },
-          {
-            groupName: 'Continua Paaaagine 2',
-            items: [
-              {
-                label: 'Paginetta 3',
-                href: '/dashboard',
-              },
-              {
-                label: 'Paginaccia 3',
-                href: '/dashboard',
-              },
-              {
-                label: 'Paginona 3',
-                href: '/dashboard',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    groupName: 'Altre pagine',
+    groupName: 'Other pages',
     items: [
       {
         label: 'Dashboard',

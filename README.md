@@ -3,7 +3,7 @@
 ## How to use
 
 1. Clone this repo
-2. Duplicate the file `.env.example` and rename it to `.env` (you can change the values if you want)
+2. Duplicate the file `.env.example` and rename it to `.env` (you can change the values if you want, but not necessary)
 3. Run `npm install` to install the dependencies
 4. Install [Docker](https://www.docker.com/) 
 5. Open a terminal tab and run (inside the project folder) `docker-compose up`

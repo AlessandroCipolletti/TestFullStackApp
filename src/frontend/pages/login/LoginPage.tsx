@@ -108,7 +108,7 @@ export default function LoginPage() {
         fullWidth
         onClick={goToSignup}
       >
-        Or create ad account
+        Or create an account
       </ButtonWithMargin>
       {hasFailed && <ErrorMessage color="error">Error message</ErrorMessage>}
     </PageWrapper>
